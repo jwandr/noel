@@ -136,6 +136,135 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
   .choice-grid {    grid-template-columns: 1fr;  }
 }
 .evidence-image {  display: block;  width: 100%;  max-width: 420px;  height: auto;  margin: 18px auto;  border: 1px solid #d2b27d55;  border-radius: 10px;  background: #ffffff08;}
+/* ============================================================
+   N.O.E.L. LOGIN TRANSITION — INTELLIGENCE SYSTEM INITIALISATION
+   ============================================================ */
+.noel-boot {
+  --boot-line:rgba(210,178,125,.28);
+  min-height:calc(100vh - 150px);
+  display:grid;
+  place-items:center;
+  padding:28px 0 44px;
+  animation:bootFadeIn .55s ease both;
+}
+.boot-console {
+  width:min(100%,900px);
+  position:relative;
+  overflow:hidden;
+  padding:clamp(20px,4vw,38px);
+  border:1px solid var(--gold);
+  border-radius:14px;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(113,155,125,.13),transparent 52%),
+    linear-gradient(145deg,#153b34,#0d2925 72%);
+  box-shadow:0 22px 70px #0005,inset 0 0 45px #0003;
+}
+.boot-console::before {
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.15;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,#d2b27d12 4px);
+}
+.boot-topline,.boot-bottomline {
+  position:relative; display:flex; justify-content:space-between; gap:12px;
+  flex-wrap:wrap; color:var(--muted); font:10px/1.5 "Courier New",monospace;
+  letter-spacing:1.5px;
+}
+.boot-topline { padding-bottom:15px; border-bottom:1px solid var(--boot-line); }
+.boot-heading { position:relative; text-align:center; margin:24px 0 12px; }
+.boot-heading h1 {
+  color:var(--gold); font:600 clamp(24px,4vw,34px)/1.2 "Courier New",monospace;
+  letter-spacing:clamp(2px,1vw,5px); margin:8px 0 10px;
+}
+.boot-heading p { margin:0; color:#d6dcd1; font:11px/1.6 "Courier New",monospace; letter-spacing:1.5px; }
+.boot-seal { color:var(--gold); font-size:25px; letter-spacing:5px; }
+.boot-visuals {
+  position:relative; display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:14px; align-items:center; margin:24px 0;
+}
+.boot-module {
+  min-width:0; min-height:190px; position:relative; overflow:hidden;
+  border:1px solid var(--boot-line); border-radius:10px;
+  background:#081e1b88; padding:13px;
+}
+.boot-module-title {
+  color:var(--gold); font:10px "Courier New",monospace;
+  letter-spacing:1.5px; text-align:center;
+}
+.boot-radar {
+  width:min(100%,158px); aspect-ratio:1; margin:10px auto 0; position:relative;
+  border:1px solid #719b7d80; border-radius:50%;
+  background:repeating-radial-gradient(circle,transparent 0 20%,#719b7d32 20.5% 21%,transparent 21.5% 40%);
+  overflow:hidden;
+}
+.boot-radar::before,.boot-radar::after {
+  content:""; position:absolute; background:#719b7d55;
+}
+.boot-radar::before { width:1px; height:100%; left:50%; top:0; }
+.boot-radar::after { height:1px; width:100%; top:50%; left:0; }
+.radar-sweep {
+  position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 72%,#719b7d05 78%,#a6d4b955 100%);
+  animation:radarSpin 3.2s linear infinite;
+}
+.radar-blip {
+  position:absolute; width:6px; height:6px; border-radius:50%;
+  background:var(--gold); box-shadow:0 0 9px var(--gold);
+  animation:blipPulse 1.6s ease-in-out infinite;
+}
+.radar-blip.one { left:65%; top:28%; }
+.radar-blip.two { left:33%; top:62%; animation-delay:.5s; }
+.radar-blip.three { left:73%; top:72%; animation-delay:1s; }
+.boot-network { width:100%; height:155px; display:block; margin-top:5px; }
+.network-line { stroke:#719b7d; stroke-width:1.3; stroke-dasharray:5 5; opacity:.7; animation:networkFlow 2s linear infinite; }
+.network-node { fill:#d2b27d; stroke:#f3eee4; stroke-width:1; transform-box:fill-box; transform-origin:center; animation:nodePulse 1.8s ease-in-out infinite; }
+.network-node:nth-of-type(2n) { animation-delay:.45s; }
+.boot-files { display:grid; gap:8px; margin-top:14px; }
+.boot-file {
+  display:flex; justify-content:space-between; align-items:center; gap:5px;
+  padding:8px 7px; border:1px solid #d2b27d44; border-radius:4px;
+  color:#d9d4c7; font:9px "Courier New",monospace; letter-spacing:.7px;
+  opacity:.28; transform:translateX(8px);
+}
+.boot-file.loaded { opacity:1; transform:translateX(0); border-color:#a6d4b9a0; background:#719b7d17; transition:all .35s ease; }
+.boot-file .file-state { color:var(--gold); white-space:nowrap; }
+.boot-status {
+  position:relative; min-height:72px; margin:18px 0 15px; padding:14px 16px;
+  border-left:2px solid var(--gold); background:#071c19a8;
+  font:12px/1.7 "Courier New",monospace; color:#e5e0d5;
+}
+.boot-status-label { color:var(--gold); font-size:9px; letter-spacing:2px; margin-bottom:5px; }
+.boot-message::after { content:""; display:inline-block; width:7px; height:13px; margin-left:5px; vertical-align:-2px; background:var(--gold); animation:cursorBlink .8s steps(2) infinite; }
+.boot-progress-row { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font:10px "Courier New",monospace; letter-spacing:1px; }
+.boot-progress-track { height:7px; margin-top:9px; border:1px solid #719b7d70; background:#061b18; overflow:hidden; }
+.boot-progress-fill { width:0; height:100%; background:linear-gradient(90deg,#719b7d,var(--gold)); box-shadow:0 0 12px #d2b27d66; transition:width .35s ease; }
+.boot-bottomline { margin-top:19px; padding-top:13px; border-top:1px solid var(--boot-line); }
+.boot-sound {
+  position:relative; border:1px solid #d2b27d88; border-radius:6px;
+  padding:8px 11px; background:transparent; color:var(--gold);
+  font:10px "Courier New",monospace; letter-spacing:1px;
+}
+.boot-sound[aria-pressed="true"] { background:#d2b27d20; color:#fff0d2; }
+.boot-auth { color:#a6d4b9; }
+@keyframes bootFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes radarSpin { to{transform:rotate(360deg)} }
+@keyframes blipPulse { 0%,100%{opacity:.45;transform:scale(.75)} 50%{opacity:1;transform:scale(1.35)} }
+@keyframes networkFlow { to{stroke-dashoffset:-20} }
+@keyframes nodePulse { 0%,100%{transform:scale(.8);opacity:.65} 50%{transform:scale(1.35);opacity:1} }
+@keyframes cursorBlink { 50%{opacity:0} }
+@media(max-width:650px) {
+  .boot-visuals { grid-template-columns:1fr 1fr; }
+  .boot-module:last-child { grid-column:1/-1; min-height:unset; }
+  .boot-files { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .boot-file { font-size:8px; }
+}
+@media(max-width:420px) {
+  .boot-visuals { grid-template-columns:1fr; }
+  .boot-module:last-child { grid-column:auto; }
+  .boot-module { min-height:175px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .noel-boot,.radar-sweep,.radar-blip,.network-line,.network-node,.boot-message::after { animation:none!important; }
+  .boot-progress-fill,.boot-file.loaded { transition:none!important; }
+}
 </style>
 </head>
 <body>
@@ -392,6 +521,165 @@ function goLogin() {
     </div>
   `, "login");
 }
+// ============================================================
+// N.O.E.L. AUTHENTICATION TRANSITION
+// A ten-second intelligence-system boot sequence.
+// Sound is optional and remains off unless the agent enables it.
+// ============================================================
+let noelSoundEnabled = false;
+let noelAudioContext = null;
+let noelBootTimers = [];
+function playNoelTone(frequency = 660, duration = 0.09, volume = 0.035) {
+  if (!noelSoundEnabled) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    noelAudioContext = noelAudioContext || new AudioContextClass();
+    if (noelAudioContext.state === "suspended") noelAudioContext.resume();
+    const oscillator = noelAudioContext.createOscillator();
+    const gain = noelAudioContext.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(frequency, noelAudioContext.currentTime);
+    gain.gain.setValueAtTime(volume, noelAudioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, noelAudioContext.currentTime + duration);
+    oscillator.connect(gain);
+    gain.connect(noelAudioContext.destination);
+    oscillator.start();
+    oscillator.stop(noelAudioContext.currentTime + duration);
+  } catch (error) {
+    // Audio is an optional flourish; the transition works without it.
+  }
+}
+function toggleNoelSound(button) {
+  noelSoundEnabled = !noelSoundEnabled;
+  button.setAttribute("aria-pressed", String(noelSoundEnabled));
+  button.textContent = noelSoundEnabled ? "♪ SOUND: ON" : "♫ SOUND: OFF";
+  if (noelSoundEnabled) {
+    playNoelTone(740, 0.12, 0.045);
+    setTimeout(() => playNoelTone(980, 0.12, 0.035), 100);
+  }
+}
+function initialiseNoelSystem() {
+  noelBootTimers.forEach(clearTimeout);
+  noelBootTimers = [];
+  noelSoundEnabled = false;
+  const fileRows = CONFIG.operations.map((op, index) => `
+    <div class="boot-file" id="boot-file-${index}">
+      <span>00${index + 1} // ${op.title.replace(/^Operation\s+/i, "").toUpperCase()}</span>
+      <span class="file-state">PENDING</span>
+    </div>
+  `).join("");
+  showScreen(`
+    <section class="noel-boot" aria-live="polite">
+      <div class="boot-console">
+        <div class="boot-topline">
+          <span>N.O.E.L. // SECURE ACCESS NODE</span>
+          <span>ENCRYPTION: ACTIVE</span>
+        </div>
+        <div class="boot-heading">
+          <div class="boot-seal">N.O.E.L.</div>
+          <h1>INTELLIGENCE SYSTEM INITIALISATION</h1>
+          <p> NATIONAL OFFICE OF EMOJI LIAISON // FIELD OPERATIONS DIVISION </p>
+        </div>
+        <div class="boot-visuals">
+          <div class="boot-module">
+            <div class="boot-module-title">01 // SIGNAL SCAN</div>
+            <div class="boot-radar" aria-hidden="true">
+              <div class="radar-sweep"></div>
+              <span class="radar-blip one"></span>
+              <span class="radar-blip two"></span>
+              <span class="radar-blip three"></span>
+            </div>
+          </div>
+          <div class="boot-module">
+            <div class="boot-module-title">02 // SECURE NETWORK</div>
+            <svg class="boot-network" viewBox="0 0 220 155" role="img" aria-label="Animated network of secure intelligence connections">
+              <g fill="none">
+                <path class="network-line" d="M24 25 L104 48 L190 20 M24 25 L54 118 L104 48 L155 126 L190 20 M54 118 L155 126 L190 20 M24 25 L155 126"/>
+              </g>
+              <g>
+                <circle class="network-node" cx="24" cy="25" r="5"/>
+                <circle class="network-node" cx="104" cy="48" r="6"/>
+                <circle class="network-node" cx="190" cy="20" r="5"/>
+                <circle class="network-node" cx="54" cy="118" r="5"/>
+                <circle class="network-node" cx="155" cy="126" r="6"/>
+              </g>
+            </svg>
+          </div>
+          <div class="boot-module">
+            <div class="boot-module-title">03 // CASE ARCHIVE</div>
+            <div class="boot-files">${fileRows}</div>
+          </div>
+        </div>
+        <div class="boot-status">
+          <div class="boot-status-label">SYSTEM MESSAGE // <span id="boot-step">01</span></div>
+          <div class="boot-message" id="boot-message">Establishing secure connection...</div>
+        </div>
+        <div class="boot-progress-row">
+          <span id="boot-progress-label">INITIALISING</span>
+          <span id="boot-percent">00%</span>
+        </div>
+        <div class="boot-progress-track" role="progressbar" aria-label="System initialisation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="boot-progress">
+          <div class="boot-progress-fill" id="boot-progress-fill"></div>
+        </div>
+        <div class="boot-bottomline">
+          <span class="boot-auth">● AGENT AUTHENTICATED: ${CONFIG.agentId}</span>
+          <button class="boot-sound" type="button" aria-pressed="false" onclick="toggleNoelSound(this)">♫ SOUND: OFF</button>
+          <span>PLEASE STAND BY // 10 SEC</span>
+        </div>
+      </div>
+    </section>
+  `, "boot");
+  const stages = [
+    { at: 0, step: "01", message: "Establishing secure connection...", label: "CONNECTING", tone: 520 },
+    { at: 1100, step: "02", message: "Verifying agent credentials and clearance level...", label: "IDENTITY VERIFIED", tone: 620 },
+    { at: 2400, step: "03", message: "Opening encrypted channels across the N.O.E.L. intelligence network...", label: "NETWORK ONLINE", tone: 720 },
+    { at: 3900, step: "04", message: "Scanning the Digital Realm for unexplained emoji activity...", label: "SCANNING SIGNALS", tone: 820 },
+    { at: 5400, step: "05", message: "Anomalous activity detected. Cross-referencing six active investigations...", label: "ANOMALIES LOCATED", tone: 920 },
+    { at: 7000, step: "06", message: "Retrieving classified case files and synchronising field evidence...", label: "ARCHIVE RETRIEVAL", tone: 760 },
+    { at: 8500, step: "07", message: "All six case files secured. Preparing your operational briefing...", label: "BRIEFING READY", tone: 980 },
+    { at: 9600, step: "08", message: "CLEARANCE GRANTED. Welcome to the N.O.E.L. operations floor, Agent.", label: "ACCESS GRANTED", tone: 1120 }
+  ];
+  stages.forEach((stage, index) => {
+    noelBootTimers.push(setTimeout(() => {
+      const step = document.getElementById("boot-step");
+      const message = document.getElementById("boot-message");
+      const label = document.getElementById("boot-progress-label");
+      if (!step || !message || !label) return;
+      step.textContent = stage.step;
+      message.textContent = stage.message;
+      label.textContent = stage.label;
+      playNoelTone(stage.tone, 0.085, 0.025);
+      if (index >= 4) {
+        const fileIndex = Math.min(index - 4, CONFIG.operations.length - 1);
+        const file = document.getElementById("boot-file-" + fileIndex);
+        if (file) {
+          file.classList.add("loaded");
+          file.querySelector(".file-state").textContent = "SECURED ✓";
+        }
+      }
+    }, stage.at));
+  });
+  const startTime = Date.now();
+  const updateProgress = () => {
+    const elapsed = Date.now() - startTime;
+    const percent = Math.min(100, Math.floor(elapsed / 10000 * 100));
+    const fill = document.getElementById("boot-progress-fill");
+    const number = document.getElementById("boot-percent");
+    const bar = document.getElementById("boot-progress");
+    if (!fill || !number || !bar) return;
+    fill.style.width = percent + "%";
+    number.textContent = String(percent).padStart(2, "0") + "%";
+    bar.setAttribute("aria-valuenow", String(percent));
+    if (percent < 100) noelBootTimers.push(setTimeout(updateProgress, 100));
+  };
+  updateProgress();
+  noelBootTimers.push(setTimeout(() => {
+    noelBootTimers.forEach(clearTimeout);
+    noelBootTimers = [];
+    dashboard();
+  }, 10000));
+}
 function login(event) {
   event.preventDefault();
   const agent = document.getElementById("agent").value.trim().toUpperCase();
@@ -399,7 +687,7 @@ function login(event) {
   if (agent === CONFIG.agentId.toUpperCase() && access === CONFIG.accessCode) {
     progress.loggedIn = true;
     saveProgress();
-    dashboard();
+    initialiseNoelSystem();
   } else {
     document.getElementById("loginError").textContent =
       "Credentials not recognised. Please check your identification.";
@@ -517,7 +805,7 @@ const phaseHTML = (phase, data, experience, complete, locked) => {
           ${data.options.map(option => `
             <button
               class="btn secondary choice-button"
-              onclick="submitChoice('${phase}', '${option.replace(/'/g, "\\'")}')"
+              onclick="submitChoice('${phase}', '${option.replace(/'/g, "\\\\'")}')"
             >
               ${option}
             </button>
@@ -560,14 +848,11 @@ function submitChoice(phase, selectedAnswer) {
   const op = currentOperation;
   const data = op[phase];
   const feedback = document.getElementById("feedback-" + phase);
-
   if (normaliseAnswer(selectedAnswer) === normaliseAnswer(data.answer)) {
     progress.phases[op.id + "-" + phase] = true;
-
     if (phase === "found") {
       progress.completed[op.id] = true;
     }
-
     saveProgress();
     renderOperation();
   } else {
