@@ -569,11 +569,10 @@ function goLogin() {
   showScreen(`
     <div class="login-wrap">
       <section class="login-card">
-        <div class="eyebrow">RESTRICTED ACCESS // NOEL</div>
+        <div class="eyebrow">RESTRICTED ACCESS</div>
         <img class="login-logo" src="${CONFIG.logoFile}" alt="N.O.E.L. emblem"
              onerror="this.style.display='none';document.getElementById('loginFallback').classList.remove('hidden')">
         <div id="loginFallback" class="login-fallback hidden">N.O.E.L.</div>
-        <p>Welcome, Agent. Please authenticate your credentials to access the operational system.</p>
         <form onsubmit="login(event)">
           <label for="agent">Agent identification</label>
           <input id="agent" autocomplete="username" value="${CONFIG.agentId}" required>
