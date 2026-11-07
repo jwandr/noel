@@ -369,7 +369,7 @@ input {
 /* File reference */
 .case-number {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 1.3px;
   line-height: 1.6;
@@ -575,7 +575,7 @@ input {
 
 /* Folder tab */
 .case::before {
-  content: "N.O.E.L. // CLASSIFIED";
+  content: "CLASSIFIED";
   position: absolute;
   top: 0;
   left: 20px;
@@ -586,7 +586,7 @@ input {
   color: #102f2b;
   font-size: 8px;
   font-weight: 800;
-  letter-spacing: 1.3px;
+  letter-spacing: 2.3px;
   border-radius: 0 0 5px 5px;
 }
 
@@ -924,7 +924,7 @@ function dashboard() {
     return `
       <article class="case ${done ? "done" : ""}" onclick="openOperation('${op.id}')">
         <div class="case-number">
-          CASE FILE 00${i + 1} // ${status}
+          ${op.title}
         </div>
         <div class="case-emoji">${op.emoji}</div>
         <h3>${op.title}</h3>
