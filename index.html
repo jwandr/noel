@@ -526,7 +526,7 @@ function goLogin() {
 // A ten-second intelligence-system boot sequence.
 // Sound is optional and remains off unless the agent enables it.
 // ============================================================
-let noelSoundEnabled = false;
+let noelSoundEnabled = true;
 let noelAudioContext = null;
 let noelBootTimers = [];
 function playNoelTone(frequency = 660, duration = 0.09, volume = 0.035) {
@@ -551,7 +551,7 @@ function playNoelTone(frequency = 660, duration = 0.09, volume = 0.035) {
   }
 }
 function toggleNoelSound(button) {
-  noelSoundEnabled = noelSoundEnabled;
+  noelSoundEnabled = !noelSoundEnabled;
   button.setAttribute("aria-pressed", String(noelSoundEnabled));
   button.textContent = noelSoundEnabled ? "♪ SOUND: ON" : "♫ SOUND: OFF";
   if (noelSoundEnabled) {
