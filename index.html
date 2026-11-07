@@ -626,7 +626,64 @@ input {
     0 4px 8px #00000025,
     inset 0 1px 0 #ffffff12;
 }
+/* =========================================
+   MANILA DROP-FILE FOLDERS
+   ========================================= */
 
+.case {
+  position: relative;
+  background: #d8c49d;
+  color: #263b32;
+  border: 1px solid #bba77f;
+  border-radius: 3px 12px 12px 12px;
+  margin-top: 28px;
+  padding: 30px 25px 25px;
+  box-shadow:
+    0 5px 12px #00000025,
+    inset 0 1px 0 #ffffff55;
+}
+
+/* Folder tab protruding above the folder */
+.case::before {
+  content: "N.O.E.L. // CLASSIFIED";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 190px;
+  height: 21px;
+  box-sizing: border-box;
+  padding: 4px 12px 3px;
+  background: #d8c49d;
+  color: #263b32;
+  border: 1px solid #bba77f;
+  border-bottom: none;
+  border-radius: 5px 7px 0 0;
+  font-family: "Avenir Next", Avenir, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-align: left;
+}
+
+/* Folder text */
+.case h2,
+.case h3,
+.case p,
+.case .case-number,
+.case .case-status {
+  color: #263b32;
+}
+
+/* Subtle divider */
+.case .case-divider {
+  border-color: #bba77f;
+}
+
+/* Make the completed stamp stand out on buff */
+.case.done::after {
+  /* Retains your existing stamp image */
+  background-image: url("complete-stamp.png");
+}
 
 </style>
 </head>
