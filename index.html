@@ -551,7 +551,7 @@ function playNoelTone(frequency = 660, duration = 0.09, volume = 0.035) {
   }
 }
 function toggleNoelSound(button) {
-  noelSoundEnabled = !noelSoundEnabled;
+  noelSoundEnabled = noelSoundEnabled;
   button.setAttribute("aria-pressed", String(noelSoundEnabled));
   button.textContent = noelSoundEnabled ? "♪ SOUND: ON" : "♫ SOUND: OFF";
   if (noelSoundEnabled) {
