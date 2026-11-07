@@ -117,7 +117,7 @@ label {
 }
 .case:hover { border-color: var(--gold); transform: translateY(-3px); }
 .case.done { border-color: var(--gold); }
-.case-emoji { font-size: 30px; margin: 12px 0; }
+.case-emoji { font-size: 60px; margin: 12px 0; display: flex; justify-content: center; }
 .case h3 { margin: 5px 0; }
 .case-status {
   font: 10px Arial, sans-serif; letter-spacing: 1.5px;
@@ -927,7 +927,7 @@ function dashboard() {
           ${op.title}
         </div>
         <div class="case-emoji">${op.emoji}</div>
-        <h3>${op.title}</h3>
+        
         <div class="small">${done ? "Investigation successfully concluded." : "Select to access case file."}</div>
         ${done ? `<div class="case-word">CASE WORD: ${op.codeWord}</div>` : ""}
       </article>`;
