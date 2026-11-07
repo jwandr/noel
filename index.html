@@ -413,7 +413,7 @@ function dashboard() {
       <p>Reports have been received of emoji escaping the Digital Realm and appearing in the physical world. Six cases require your attention. Investigate each disappearance, locate the missing emoji and recover the evidence. Christmas cheer depends on it.</p>
     </section>
     <div class="toolbar">
-      <h2>Active case files</h2>
+      <h2>Case files</h2>
       <div class="progress-wrap">
       <div class="toolbar">
         <span class="eyebrow">OVERALL CASE PROGRESS</span>
@@ -503,15 +503,8 @@ const phaseHTML = (phase, data, complete, locked) => {
       <button class="back" onclick="dashboard()">← BACK TO OPERATIONS</button>
       <span class="eyebrow">CASE FILE // ${op.id.toUpperCase()}</span>
     </div>
-    <div class="eyebrow">${op.emoji} // ACTIVE INVESTIGATION</div>
-    <h1>${op.title}</h1>
+    <h1>${op.emoji} ${op.title}</h1>
     <p>${op.summary}</p>
-    <div class="panel">
-      <div class="eyebrow">INVESTIGATION STATUS</div>
-      <p>${done ? "This case has been successfully resolved." :
-        lostDone ? "The initial sighting has been confirmed. Proceed with recovery." :
-        "The initial sighting must be investigated before recovery can begin."}</p>
-    </div>
     ${phaseHTML("lost", op.lost, lostDone, false)}
     ${phaseHTML("found", op.found, foundDone, !lostDone)}
     ${done ? `
