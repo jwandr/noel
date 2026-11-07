@@ -265,6 +265,29 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
   .noel-boot,.radar-sweep,.radar-blip,.network-line,.network-node,.boot-message::after { animation:none!important; }
   .boot-progress-fill,.boot-file.loaded { transition:none!important; }
 }
+/* ---------- Boot exit + dashboard reveal ---------- */
+.boot-console.boot-exit { animation: bootExit .8s ease-in forwards; }
+@keyframes bootExit {
+  0%   { opacity:1; transform:scale(1);    filter:brightness(1); }
+  30%  { opacity:1; transform:scale(1.01); filter:brightness(1.8); }
+  100% { opacity:0; transform:scale(1.06); filter:brightness(1) blur(6px); }
+}
+.boot-flash {
+  position:fixed; inset:0; z-index:90; pointer-events:none; opacity:0;
+  background:radial-gradient(circle at center,#d2b27d66,transparent 70%);
+  animation:bootFlash .8s ease-out;
+}
+@keyframes bootFlash { 0%{opacity:0} 30%{opacity:1} 100%{opacity:0} }
+
+/* "backwards" fill so hover transforms on case folders still work afterwards */
+.reveal { animation:revealIn .6s cubic-bezier(.2,.7,.2,1) backwards; animation-delay:var(--d,0s); }
+@keyframes revealIn {
+  from { opacity:0; transform:translateY(18px); filter:blur(4px); }
+  to   { opacity:1; transform:none; filter:none; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .reveal,.boot-console.boot-exit,.boot-flash { animation:none!important; }
+}
 </style>
 </head>
 <body>
@@ -526,52 +549,123 @@ function goLogin() {
 // A ten-second intelligence-system boot sequence.
 // Sound is optional and remains off unless the agent enables it.
 // ============================================================
-let noelSoundEnabled = true;
+let noelSoundEnabled = true;          // ON by default
 let noelAudioContext = null;
+let noelMaster = null;
 let noelBootTimers = [];
-function playNoelTone(frequency = 660, duration = 0.09, volume = 0.035) {
+
+function getNoelAudio() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  if (!noelAudioContext) {
+    noelAudioContext = new AC();
+    const comp = noelAudioContext.createDynamicsCompressor();
+    noelMaster = noelAudioContext.createGain();
+    noelMaster.gain.value = 1.0;      // master volume
+    noelMaster.connect(comp);
+    comp.connect(noelAudioContext.destination);
+  }
+  if (noelAudioContext.state === "suspended") noelAudioContext.resume();
+  return noelAudioContext;
+}
+
+// Digital blip: filtered square/saw with a quick upward pitch glide
+function playNoelTone(frequency = 660, duration = 0.12, volume = 0.12, type = "square") {
   if (!noelSoundEnabled) return;
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    noelAudioContext = noelAudioContext || new AudioContextClass();
-    if (noelAudioContext.state === "suspended") noelAudioContext.resume();
-    const oscillator = noelAudioContext.createOscillator();
-    const gain = noelAudioContext.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(frequency, noelAudioContext.currentTime);
-    gain.gain.setValueAtTime(volume, noelAudioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, noelAudioContext.currentTime + duration);
-    oscillator.connect(gain);
-    gain.connect(noelAudioContext.destination);
-    oscillator.start();
-    oscillator.stop(noelAudioContext.currentTime + duration);
-  } catch (error) {
-    // Audio is an optional flourish; the transition works without it.
-  }
+    const ctx = getNoelAudio(); if (!ctx) return;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency, t);
+    osc.frequency.exponentialRampToValueAtTime(frequency * 1.5, t + duration);
+    filter.type = "lowpass"; filter.frequency.value = 3200;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(volume, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    osc.connect(filter); filter.connect(gain); gain.connect(noelMaster);
+    osc.start(t); osc.stop(t + duration + 0.02);
+  } catch (e) {}
 }
+
+// Whoosh: band-passed noise with a frequency sweep (rising or falling)
+function playNoelWhoosh(duration = 0.9, rising = true, volume = 0.22) {
+  if (!noelSoundEnabled) return;
+  try {
+    const ctx = getNoelAudio(); if (!ctx) return;
+    const t = ctx.currentTime;
+    const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * duration), ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource(); src.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass"; filter.Q.value = 1.4;
+    const [from, to] = rising ? [250, 5000] : [5000, 250];
+    filter.frequency.setValueAtTime(from, t);
+    filter.frequency.exponentialRampToValueAtTime(to, t + duration);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(volume, t + duration * 0.45);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    src.connect(filter); filter.connect(gain); gain.connect(noelMaster);
+    src.start(t);
+  } catch (e) {}
+}
+
+// Quick digital arpeggio
+function playNoelChirp(freqs = [880, 1175, 1568], gap = 65, volume = 0.09) {
+  freqs.forEach((f, i) =>
+    setTimeout(() => playNoelTone(f, 0.07, volume, "square"), i * gap));
+}
+
+// Low sub-bass boom for big moments
+function playNoelBoom(volume = 0.4) {
+  if (!noelSoundEnabled) return;
+  try {
+    const ctx = getNoelAudio(); if (!ctx) return;
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(110, t);
+    osc.frequency.exponentialRampToValueAtTime(38, t + 0.9);
+    gain.gain.setValueAtTime(volume, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.0);
+    osc.connect(gain); gain.connect(noelMaster);
+    osc.start(t); osc.stop(t + 1.05);
+  } catch (e) {}
+}
+
 function toggleNoelSound(button) {
   noelSoundEnabled = !noelSoundEnabled;
   button.setAttribute("aria-pressed", String(noelSoundEnabled));
   button.textContent = noelSoundEnabled ? "♪ SOUND: ON" : "♫ SOUND: OFF";
   if (noelSoundEnabled) {
-    playNoelTone(740, 0.12, 0.045);
-    setTimeout(() => playNoelTone(980, 0.12, 0.035), 100);
+    playNoelWhoosh(0.5, true, 0.15);
+    playNoelChirp([740, 980, 1320]);
   }
 }
 function initialiseNoelSystem() {
   noelBootTimers.forEach(clearTimeout);
   noelBootTimers = [];
   noelSoundEnabled = true;
+  getNoelAudio(); // created inside the login click, so the browser allows audio
+
+  const BOOT_MS = 14000;   // total time before dashboard appears
+  const EXIT_MS = 800;     // exit animation length
+
   const fileRows = CONFIG.operations.map((op, index) => `
     <div class="boot-file" id="boot-file-${index}">
       <span>00${index + 1} // ${op.title.replace(/^Operation\s+/i, "").toUpperCase()}</span>
       <span class="file-state">PENDING</span>
     </div>
   `).join("");
+
   showScreen(`
     <section class="noel-boot" aria-live="polite">
-      <div class="boot-console">
+      <div class="boot-console" id="boot-console">
         <div class="boot-topline">
           <span>N.O.E.L. // SECURE ACCESS NODE</span>
           <span>ENCRYPTION: ACTIVE</span>
@@ -624,23 +718,29 @@ function initialiseNoelSystem() {
         </div>
         <div class="boot-bottomline">
           <span class="boot-auth">● AGENT AUTHENTICATED: ${CONFIG.agentId}</span>
-          <button class="boot-sound" type="button" aria-pressed="false" onclick="toggleNoelSound(this)">♫ SOUND: OFF</button>
-          <span>PLEASE STAND BY // 10 SEC</span>
+          <button class="boot-sound" type="button" aria-pressed="true" onclick="toggleNoelSound(this)">♪ SOUND: ON</button>
+          <span>PLEASE STAND BY // 14 SEC</span>
         </div>
       </div>
     </section>
   `, "boot");
+
+  // Opening sound
+  playNoelWhoosh(1.0, true, 0.22);
+  playNoelChirp([520, 780, 1040]);
+
   const stages = [
-    { at: 0, step: "01", message: "Establishing secure connection...", label: "CONNECTING", tone: 520 },
-    { at: 1100, step: "02", message: "Verifying agent credentials and clearance level...", label: "IDENTITY VERIFIED", tone: 620 },
-    { at: 2400, step: "03", message: "Opening encrypted channels across the N.O.E.L. intelligence network...", label: "NETWORK ONLINE", tone: 720 },
-    { at: 3900, step: "04", message: "Scanning the Digital Realm for unexplained emoji activity...", label: "SCANNING SIGNALS", tone: 820 },
-    { at: 5400, step: "05", message: "Anomalous activity detected. Cross-referencing six active investigations...", label: "ANOMALIES LOCATED", tone: 920 },
-    { at: 7000, step: "06", message: "Retrieving classified case files and synchronising field evidence...", label: "ARCHIVE RETRIEVAL", tone: 760 },
-    { at: 8500, step: "07", message: "All six case files secured. Preparing your operational briefing...", label: "BRIEFING READY", tone: 980 },
-    { at: 9600, step: "08", message: "CLEARANCE GRANTED. Welcome to the N.O.E.L. operations floor, Agent.", label: "ACCESS GRANTED", tone: 1120 }
+    { at: 0,     step: "01", message: "Establishing secure connection...", label: "CONNECTING", chirp: [520, 780] },
+    { at: 1600,  step: "02", message: "Verifying agent credentials and clearance level...", label: "IDENTITY VERIFIED", chirp: [620, 930, 1240] },
+    { at: 3400,  step: "03", message: "Opening encrypted channels across the N.O.E.L. intelligence network...", label: "NETWORK ONLINE", chirp: [720, 1080] },
+    { at: 5400,  step: "04", message: "Scanning the Digital Realm for unexplained emoji activity...", label: "SCANNING SIGNALS", chirp: [820, 1230, 820] },
+    { at: 7400,  step: "05", message: "Anomalous activity detected. Cross-referencing six active investigations...", label: "ANOMALIES LOCATED", chirp: [920, 1380, 1840] },
+    { at: 9400,  step: "06", message: "Retrieving classified case files and synchronising field evidence...", label: "ARCHIVE RETRIEVAL", chirp: [760, 1140] },
+    { at: 11400, step: "07", message: "All six case files secured. Preparing your operational briefing...", label: "BRIEFING READY", chirp: [980, 1470, 1960] },
+    { at: 12800, step: "08", message: "CLEARANCE GRANTED. Welcome to the N.O.E.L. operations floor, Agent.", label: "ACCESS GRANTED", chirp: [1120, 1400, 1680, 2240], final: true }
   ];
-  stages.forEach((stage, index) => {
+
+  stages.forEach(stage => {
     noelBootTimers.push(setTimeout(() => {
       const step = document.getElementById("boot-step");
       const message = document.getElementById("boot-message");
@@ -649,21 +749,33 @@ function initialiseNoelSystem() {
       step.textContent = stage.step;
       message.textContent = stage.message;
       label.textContent = stage.label;
-      playNoelTone(stage.tone, 0.085, 0.025);
-      if (index >= 4) {
-        const fileIndex = Math.min(index - 4, CONFIG.operations.length - 1);
-        const file = document.getElementById("boot-file-" + fileIndex);
-        if (file) {
-          file.classList.add("loaded");
-          file.querySelector(".file-state").textContent = "SECURED ✓";
-        }
+      if (stage.final) {
+        playNoelBoom(0.45);
+        playNoelWhoosh(1.1, true, 0.25);
+      } else {
+        playNoelWhoosh(0.45, stage.step % 2 === 0, 0.14);
       }
+      playNoelChirp(stage.chirp);
     }, stage.at));
   });
+
+  // Case files "secured" one at a time (all six, spread across the sequence)
+  CONFIG.operations.forEach((op, i) => {
+    noelBootTimers.push(setTimeout(() => {
+      const file = document.getElementById("boot-file-" + i);
+      if (!file) return;
+      file.classList.add("loaded");
+      file.querySelector(".file-state").textContent = "SECURED ✓";
+      playNoelTone(1400 + i * 120, 0.06, 0.07, "square");
+    }, 7000 + i * 900));
+  });
+
+  // Progress bar: reaches 100% as the exit animation begins
+  const exitAt = BOOT_MS - EXIT_MS;
   const startTime = Date.now();
   const updateProgress = () => {
     const elapsed = Date.now() - startTime;
-    const percent = Math.min(100, Math.floor(elapsed / 20000 * 100));
+    const percent = Math.min(100, Math.floor(elapsed / exitAt * 100));
     const fill = document.getElementById("boot-progress-fill");
     const number = document.getElementById("boot-percent");
     const bar = document.getElementById("boot-progress");
@@ -674,11 +786,24 @@ function initialiseNoelSystem() {
     if (percent < 100) noelBootTimers.push(setTimeout(updateProgress, 100));
   };
   updateProgress();
+
+  // Exit transition: console flashes, fades and scales away
+  noelBootTimers.push(setTimeout(() => {
+    const consoleEl = document.getElementById("boot-console");
+    if (consoleEl) consoleEl.classList.add("boot-exit");
+    const flash = document.createElement("div");
+    flash.className = "boot-flash";
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 900);
+    playNoelWhoosh(0.9, false, 0.25);
+  }, exitAt));
+
+  // Hand over to the dashboard, with the staged reveal
   noelBootTimers.push(setTimeout(() => {
     noelBootTimers.forEach(clearTimeout);
     noelBootTimers = [];
-    dashboard();
-  }, 10000));
+    dashboard(true);
+  }, BOOT_MS));
 }
 function login(event) {
   event.preventDefault();
@@ -696,17 +821,17 @@ function login(event) {
 // ============================================================
 // OPERATIONS DASHBOARD
 // ============================================================
-function dashboard() {
+function dashboard(animate = false) {
   const completedCount = CONFIG.operations.filter(caseDone).length;
+
+  // Adds the reveal class + stagger delay only when animating
+  const rv = (base, delay) =>
+    `class="${base}${animate ? " reveal" : ""}"${animate ? ` style="--d:${delay}s"` : ""}`;
+
   const cards = CONFIG.operations.map((op, i) => {
     const done = caseDone(op);
-    const lost = phaseDone(op.id, "lost");
-    const found = phaseDone(op.id, "found");
-    let status = done ? "CASE RESOLVED" :
-      found ? "FOUND PHASE COMPLETE" :
-      lost ? "FOUND PHASE UNLOCKED" : "AWAITING INVESTIGATION";
     return `
-      <article class="case ${done ? "done" : ""}" onclick="openOperation('${op.id}')">
+      <article ${rv("case" + (done ? " done" : ""), (1.4 + i * 0.18).toFixed(2))} onclick="openOperation('${op.id}')">
         <div class="case-number">
           ${op.title}
         </div>
@@ -714,26 +839,27 @@ function dashboard() {
         ${done ? `<div class="case-word">CASE WORD: ${op.codeWord}</div>` : ""}
       </article>`;
   }).join("");
+
   showScreen(`
-    <section class="dashboard-intro">
+    <section ${rv("dashboard-intro", 0.2)}>
       <h1>Good morning, E.L.F. Agent SuperTim.</h1>
       <p>Reports have been received of emoji escaping the Digital Realm and appearing in the physical world. Six cases require your attention. Investigate each disappearance, locate the missing emoji and recover the evidence. Christmas cheer depends on it.</p>
     </section>
-    <div class="toolbar">
+    <div ${rv("toolbar", 0.7)}>
       <h2>Case files</h2>
       <div class="progress-wrap">
-      <div class="toolbar">
-        <span class="eyebrow">OVERALL CASE PROGRESS</span>
-        <strong class="gold">${completedCount} / 6 RESOLVED</strong>
+        <div class="toolbar">
+          <span class="eyebrow">OVERALL CASE PROGRESS</span>
+          <strong class="gold">${completedCount} / 6 RESOLVED</strong>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${completedCount / 6 * 100}%"></div>
+        </div>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width:${completedCount / 6 * 100}%"></div>
-      </div>
-    </div>
     </div>
     <div class="grid">${cards}</div>
     ${allCasesDone() ? `
-      <section class="reward">
+      <section ${rv("reward", 2.7)}>
         <div class="eyebrow">ALL SIX CASES RESOLVED</div>
         <h2 class="gold">The final investigation awaits.</h2>
         <p>All six code words have been recovered. A final message requires your attention.</p>
@@ -741,13 +867,33 @@ function dashboard() {
       </section>
     ` : ""}
     ${progress.finalComplete ? `
-      <section class="reward">
+      <section ${rv("reward", 2.7)}>
         <div class="eyebrow">FINAL INVESTIGATION COMPLETE</div>
         <h2 class="gold">Christmas has been restored.</h2>
         <button class="btn" onclick="finalSummary()">View final report</button>
       </section>
     ` : ""}
   `, "dashboard");
+
+  if (animate) {
+    // Header and footer slide in first/last, so the whole page builds up
+    const header = document.getElementById("siteHeader");
+    const footer = document.getElementById("siteFooter");
+    header.classList.add("reveal"); header.style.setProperty("--d", "0s");
+    footer.classList.add("reveal"); footer.style.setProperty("--d", "2.6s");
+    setTimeout(() => {
+      header.classList.remove("reveal");
+      footer.classList.remove("reveal");
+    }, 3500);
+
+    // Soft digital sounds as each section lands
+    playNoelWhoosh(0.8, true, 0.16);
+    [200, 700].forEach((ms, i) =>
+      setTimeout(() => playNoelTone(900 + i * 300, 0.07, 0.06, "square"), ms));
+    CONFIG.operations.forEach((_, i) =>
+      setTimeout(() => playNoelTone(1000 + i * 110, 0.06, 0.06, "square"),
+        (1.4 + i * 0.18) * 1000));
+  }
 }
 // ============================================================
 // OPERATION DETAILS AND TWO PHASES
