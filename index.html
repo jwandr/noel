@@ -48,12 +48,12 @@ label { font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:
 .login-card input { text-align:center; }
 .login-card .btn { width:100%; }
 .error { color:#efaaa3; font-size:13px; min-height:20px; }
-.dashboard-intro { max-width:100%; margin-bottom:35px; }
+.dashboard-intro { max-width:100%; }
 .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px 16px; padding-top:20px; }
 /* Manila case folders */
 .case { position:relative; isolation:isolate; overflow:visible; min-height:225px; margin-top:18px; padding:30px 25px 25px; cursor:pointer; color:var(--folder-ink); background:var(--folder); border:1px solid var(--folder-edge); border-radius:3px 12px 12px 12px; box-shadow:0 5px 12px #00000025,inset 0 1px 0 #ffffff66; transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease; }
 .case:hover { transform:translateY(-3px); box-shadow:0 9px 22px #00000035; border-color:#8e7650; }
-.case::before { content:"CLASSIFIED"; position:absolute; z-index:3; top:-20px; left:-1px; width:150px; height:21px; box-sizing:border-box; padding:4px 12px 3px; background:#a9433d; color:#fff5e9; border:1px solid #85332f; border-bottom:0; border-radius:5px 7px 0 0; font-size:9px; font-weight:800; letter-spacing:2px; text-align:center; }
+.case::before { content:"CLASSIFIED"; position:absolute; z-index:3; top:-20px; left:-1px; width:150px; height:21px; box-sizing:border-box; padding:4px 12px 3px; background:red; color:#fff5e9; border:1px solid #85332f; border-bottom:0; border-radius:5px 7px 0 0; font-size:9px; font-weight:800; letter-spacing:2px; text-align:center; }
 .case-number { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1px solid #bba77f; color:var(--folder-ink); font-size:14px; font-weight:700; letter-spacing:1.3px; line-height:1.6; text-transform:uppercase; }
 .case-number::after { content:"E.L.F."; color:#765f3b; font-size:9px; letter-spacing:1px; }
 .case-emoji { display:flex; justify-content:center; font-size:70px; margin:30px 0 9px; }
