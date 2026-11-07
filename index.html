@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N.O.E.L. | National Office of Emoji Liaison</title>
+<style>
+:root {
+  --navy: #0d1c2e;
+  --gold: #d2b27d;
+  --ivory: #f3eee4;
+  --slate: #24384b;
+  --muted: #9ba8b5;
+  --green: #527d69;
+  --red: #a75d58;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--navy);
+  color: var(--ivory);
+  font-family: Georgia, "Times New Roman", serif;
+  min-height: 100vh;
+}
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.hidden { display: none !important; }
+.shell { max-width: 1100px; margin: auto; padding: 24px; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 0 24px;
+  border-bottom: 1px solid #d2b27d55;
+  margin-bottom: 32px;
+}
+.brand { display: flex; align-items: center; gap: 13px; }
+.brand img {
+  width: 52px; height: 52px; object-fit: contain;
+}
+.brand-mark {
+  width: 52px; height: 52px; border: 1px solid var(--gold);
+  display: grid; place-items: center; color: var(--gold);
+  font-size: 23px; border-radius: 50%;
+}
+.brand-name { letter-spacing: 3px; font-size: 20px; color: var(--gold); }
+.brand-sub { font: 10px Arial, sans-serif; letter-spacing: 1.5px; color: var(--muted); }
+.eyebrow {
+  color: var(--gold); font: 11px Arial, sans-serif;
+  letter-spacing: 2.5px; text-transform: uppercase;
+}
+h1, h2, h3 { font-weight: normal; }
+h1 { font-size: clamp(30px, 5vw, 48px); margin: 10px 0 14px; }
+h2 { font-size: 27px; }
+h3 { font-size: 19px; }
+p { line-height: 1.65; color: #d6dce1; }
+.small { font: 12px Arial, sans-serif; color: var(--muted); line-height: 1.6; }
+.gold { color: var(--gold); }
+.btn {
+  border: 1px solid var(--gold); color: var(--navy);
+  background: var(--gold); padding: 13px 20px;
+  letter-spacing: 1px; text-transform: uppercase;
+  font: bold 11px Arial, sans-serif; transition: .2s;
+}
+.btn:hover { background: #e4c99d; }
+.btn.secondary {
+  background: transparent; color: var(--gold);
+}
+.btn.secondary:hover { background: #d2b27d18; }
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+.btn.small-btn { padding: 9px 13px; font-size: 10px; }
+input {
+  width: 100%; padding: 14px; border: 1px solid #667586;
+  background: #14273b; color: white; margin: 7px 0 18px;
+}
+label {
+  font: 11px Arial, sans-serif; letter-spacing: 1.5px;
+  color: var(--gold); text-transform: uppercase;
+}
+.panel {
+  background: var(--slate); border: 1px solid #d2b27d55;
+  padding: 25px; margin: 20px 0;
+}
+.login-wrap {
+  min-height: 85vh; display: grid; place-items: center;
+}
+.login-card {
+  width: min(100%, 440px); text-align: center;
+  padding: 35px; border: 1px solid var(--gold);
+  background: #14273b;
+}
+.login-logo {
+  width: 150px; height: 150px; object-fit: contain;
+  margin: 10px auto 22px; display: block;
+}
+.login-fallback {
+  width: 150px; height: 150px; border: 2px solid var(--gold);
+  display: grid; place-items: center; margin: 10px auto 22px;
+  color: var(--gold); font-size: 34px; letter-spacing: 4px;
+}
+.login-card input { text-align: center; }
+.login-card .btn { width: 100%; }
+.error { color: #efaaa3; font: 13px Arial, sans-serif; min-height: 20px; }
+.dashboard-intro { max-width: 720px; margin-bottom: 35px; }
+.grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.case {
+  background: #14273b; border: 1px solid #566678;
+  padding: 22px; min-height: 205px; cursor: pointer;
+  transition: .2s; position: relative;
+}
+.case:hover { border-color: var(--gold); transform: translateY(-3px); }
+.case.done { border-color: var(--gold); }
+.case-emoji { font-size: 30px; margin: 12px 0; }
+.case h3 { margin: 5px 0; }
+.case-status {
+  font: 10px Arial, sans-serif; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+}
+.case.done .case-status { color: var(--gold); }
+.case-word {
+  margin-top: 17px; padding-top: 12px;
+  border-top: 1px solid #d2b27d55;
+  color: var(--gold); font: bold 15px Arial, sans-serif;
+  letter-spacing: 2px;
+}
+.progress-wrap { margin: 25px 0 35px; }
+.progress-track { height: 5px; background: #34475a; margin-top: 10px; }
+.progress-fill { height: 5px; background: var(--gold); width: 0; transition: .3s; }
+.toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+}
+.back { color: var(--gold); background: none; border: none; padding: 8px 0; }
+.phase {
+  border: 1px solid #687789; padding: 22px; margin: 15px 0;
+  background: #14273b;
+}
+.phase.active { border-color: var(--gold); }
+.phase.complete { border-color: var(--green); }
+.phase.locked { opacity: .5; }
+.phase-heading { display: flex; justify-content: space-between; gap: 10px; }
+.status-pill {
+  border: 1px solid #82909c; padding: 5px 9px;
+  font: 9px Arial, sans-serif; letter-spacing: 1px;
+  text-transform: uppercase; white-space: nowrap;
+}
+.status-pill.done { border-color: var(--green); color: #a6d4b9; }
+.answer-row { display: flex; gap: 10px; }
+.answer-row input { margin: 0; }
+.answer-row button { flex-shrink: 0; }
+.feedback { min-height: 22px; font: 13px Arial, sans-serif; margin-top: 12px; }
+.feedback.good { color: #a6d4b9; }
+.feedback.bad { color: #efaaa3; }
+.reward {
+  border: 1px solid var(--gold); padding: 25px;
+  text-align: center; margin-top: 25px; background: #172b3e;
+}
+.reward-word {
+  font: bold 32px Arial, sans-serif; color: var(--gold);
+  letter-spacing: 4px; margin: 15px;
+}
+.experience {
+  background: #20364a; padding: 14px; margin: 10px 0;
+  border-left: 2px solid var(--gold);
+}
+.experience strong {
+  display: block; color: var(--gold); font: 10px Arial, sans-serif;
+  letter-spacing: 1.5px; margin-bottom: 6px;
+}
+.word-bank, .slots, .emoji-options {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin: 20px 0;
+}
+.word {
+  background: var(--gold); color: var(--navy); border: 0;
+  padding: 14px 17px; font: bold 13px Arial, sans-serif;
+  letter-spacing: 1px; cursor: grab;
+}
+.word:active { cursor: grabbing; }
+.slot {
+  width: 105px; min-height: 65px; border: 1px dashed var(--gold);
+  display: grid; place-items: center; padding: 7px;
+  color: var(--gold); background: #14273b;
+  font: bold 12px Arial, sans-serif; text-align: center;
+}
+.slot.filled { border-style: solid; background: #20364a; }
+.slot.locked { opacity: .35; border-color: #75808b; }
+.slot small { color: var(--muted); font: 9px Arial, sans-serif; }
+.emoji-choice {
+  font-size: 33px; background: #14273b;
+  border: 1px solid #667586; padding: 13px 18px;
+}
+.emoji-choice:hover { border-color: var(--gold); transform: scale(1.08); }
+.emoji-choice.selected { border: 2px solid var(--gold); background: #31465b; }
+.final-banner {
+  text-align: center; padding: 45px 20px;
+  background: #14273b; border: 1px solid var(--gold);
+}
+.big-sheep { font-size: 90px; margin: 15px; }
+.summary-case { border-bottom: 1px solid #526174; padding: 15px 0; }
+.summary-case h3 { color: var(--gold); }
+footer {
+  margin-top: 50px; padding: 20px 0;
+  border-top: 1px solid #d2b27d44; color: var(--muted);
+  font: 10px Arial, sans-serif; letter-spacing: 1.5px;
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+#confetti {
+  position: fixed; inset: 0; pointer-events: none;
+  overflow: hidden; z-index: 100;
+}
+.confetti-piece {
+  position: absolute; top: -20px; width: 9px; height: 15px;
+  animation: fall 3.5s linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(900deg); opacity: 0; }
+}
+@media(max-width:750px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width:480px) {
+  .shell { padding: 15px; }
+  .grid { grid-template-columns: 1fr; }
+  .case { min-height: 170px; }
+  .login-card { padding: 24px; }
+  .answer-row { flex-direction: column; }
+  .slot { width: 85px; min-height: 60px; }
+  header { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div id="confetti"></div>
+<div class="shell">
+  <header id="siteHeader" class="hidden">
+    <div class="brand">
+      <img id="headerLogo" src="noel-logo.png" alt="N.O.E.L. logo"
+           onerror="this.style.display='none';document.getElementById('headerFallback').classList.remove('hidden')">
+      <div id="headerFallback" class="brand-mark hidden">N</div>
+      <div>
+        <div class="brand-name">N.O.E.L.</div>
+        <div class="brand-sub">NATIONAL OFFICE OF EMOJI LIAISON</div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="eyebrow">ELF OPERATIVE</div>
+      <div id="headerAgent" class="gold">ELF-001</div>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer id="siteFooter" class="hidden">
+    <span>N.O.E.L. // INTERNAL SYSTEM</span>
+    <span>MAKING SENSE OF THE UNEXPLAINED</span>
+    <button class="back" onclick="resetProgress()">Reset test progress</button>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// N.O.E.L. CONFIGURATION
+// Change the content in this section as your Christmas mystery
+// develops. The rest of the website uses this information.
+// ============================================================
+
+const CONFIG = {
+  agentId: "ELF-001",
+  accessCode: "NOEL2026", // CHANGE THIS to your chosen access code
+  logoFile: "noel-logo.png",
+
+  operations: [
+    {
+      id: "silent-night",
+      title: "Operation Silent Night",
+      emoji: "🔭",
+      summary: "An unusual celestial sighting has been reported. An emoji appears to have gone missing during a period of extraordinary activity.",
+      lost: {
+        destination: "Perth",
+        prompt: "A mysterious sighting has been reported in Perth. Find the location indicated by the evidence.",
+        answer: "KINGS PARK",
+        hint: "For this framework, the test answer is KINGS PARK."
+      },
+      found: {
+        destination: "Rwanda",
+        prompt: "The trail has gone international. Identify the next location from the evidence.",
+        answer: "KIGALI",
+        hint: "For this framework, the test answer is KIGALI."
+      },
+      codeWord: "ALL",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "Rwanda experience — to be confirmed"
+      }
+    },
+    {
+      id: "mince-pie",
+      title: "Operation Mince Pie",
+      emoji: "🥐",
+      summary: "A pastry-related incident has attracted the attention of our forensic team. Crumbs have been recovered. The investigation is ongoing.",
+      lost: {
+        destination: "Perth",
+        prompt: "A trail of evidence has been found near the city. Identify the location.",
+        answer: "NORTHBRIDGE",
+        hint: "For this framework, the test answer is NORTHBRIDGE."
+      },
+      found: {
+        destination: "Zanzibar",
+        prompt: "The recovered evidence points towards an overseas location. Where must the agent go?",
+        answer: "STONE TOWN",
+        hint: "For this framework, the test answer is STONE TOWN."
+      },
+      codeWord: "I",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "Zanzibar experience — to be confirmed"
+      }
+    },
+    {
+      id: "polar-express",
+      title: "Operation Polar Express",
+      emoji: "🚂",
+      summary: "An unidentified train emoji has apparently departed its digital platform. Its destination remains unknown.",
+      lost: {
+        destination: "Perth",
+        prompt: "A train-related sighting has been reported. Identify the location.",
+        answer: "PERTH STATION",
+        hint: "For this framework, the test answer is PERTH STATION."
+      },
+      found: {
+        destination: "United Kingdom",
+        prompt: "A second sighting has emerged. Follow the railway evidence.",
+        answer: "LONDON",
+        hint: "For this framework, the test answer is LONDON."
+      },
+      codeWord: "WANT",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "UK experience — to be confirmed"
+      }
+    },
+    {
+      id: "waiting-game",
+      title: "Operation The Waiting Game",
+      emoji: "🦥",
+      summary: "A slow-moving emoji has disappeared. Investigators have been advised to remain patient.",
+      lost: {
+        destination: "Perth",
+        prompt: "The missing emoji was last seen somewhere in the city. Identify the location.",
+        answer: "ELIZABETH QUAY",
+        hint: "For this framework, the test answer is ELIZABETH QUAY."
+      },
+      found: {
+        destination: "Croatia",
+        prompt: "The trail has moved abroad. Identify the location of the next sighting.",
+        answer: "DUBROVNIK",
+        hint: "For this framework, the test answer is DUBROVNIK."
+      },
+      codeWord: "FOR",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "Croatia experience — to be confirmed"
+      }
+    },
+    {
+      id: "usual-suspects",
+      title: "Operation The Usual Suspects",
+      emoji: "🕵️",
+      summary: "A familiar face has been identified at the scene of an emoji disappearance. We need to establish what happened.",
+      lost: {
+        destination: "Perth",
+        prompt: "The evidence points to a location in Perth. Where should the agent investigate?",
+        answer: "FREMANTLE",
+        hint: "For this framework, the test answer is FREMANTLE."
+      },
+      found: {
+        destination: "Australia",
+        prompt: "A further lead has emerged elsewhere in Australia. Identify the destination.",
+        answer: "MELBOURNE",
+        hint: "For this framework, the test answer is MELBOURNE."
+      },
+      codeWord: "CHRISTMAS",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "Australian experience — to be confirmed"
+      }
+    },
+    {
+      id: "deck-the-halls",
+      title: "Operation Deck the Halls",
+      emoji: "🎨",
+      summary: "An artistic emoji has vanished, leaving behind a collection of curious marks and unexplained colours.",
+      lost: {
+        destination: "Perth",
+        prompt: "The first piece of evidence points to a Perth location. Identify it.",
+        answer: "SCARBOROUGH",
+        hint: "For this framework, the test answer is SCARBOROUGH."
+      },
+      found: {
+        destination: "Australia",
+        prompt: "A final sighting has been reported. Follow the evidence to the next destination.",
+        answer: "HOBART",
+        hint: "For this framework, the test answer is HOBART."
+      },
+      codeWord: "IS",
+      experiences: {
+        lost: "Perth experience — to be confirmed",
+        found: "Australian experience — to be confirmed"
+      }
+    }
+  ],
+
+  finalWords: ["ALL", "I", "WANT", "FOR", "CHRISTMAS", "IS"],
+  emojiChoices: ["🐐", "🦙", "🐏", "🐑", "🐄", "🐇", "🦌", "🐎"]
+};
+
+// ============================================================
+// PROGRESS AND NAVIGATION
+// ============================================================
+
+const STORAGE_KEY = "noel-investigation-v1";
+let progress = loadProgress();
+let currentOperation = null;
+let wordSlots = Array(7).fill(null);
+let finalChecked = false;
+
+function freshProgress() {
+  return {
+    loggedIn: false,
+    phases: {},
+    completed: {},
+    finalComplete: false
+  };
+}
+
+function loadProgress() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return saved || freshProgress();
+  } catch {
+    return freshProgress();
+  }
+}
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function phaseDone(id, phase) {
+  return !!progress.phases[id + "-" + phase];
+}
+
+function caseDone(op) {
+  return !!progress.completed[op.id];
+}
+
+function allCasesDone() {
+  return CONFIG.operations.every(caseDone);
+}
+
+function showScreen(html, screenName) {
+  document.getElementById("app").innerHTML = html;
+  const loggedIn = screenName !== "login";
+  document.getElementById("siteHeader").classList.toggle("hidden", !loggedIn);
+  document.getElementById("siteFooter").classList.toggle("hidden", !loggedIn);
+  if (loggedIn) {
+    document.getElementById("headerAgent").textContent = CONFIG.agentId;
+  }
+  window.scrollTo(0, 0);
+}
+
+function goLogin() {
+  showScreen(`
+    <div class="login-wrap">
+      <section class="login-card">
+        <div class="eyebrow">RESTRICTED ACCESS // NOEL</div>
+        <img class="login-logo" src="${CONFIG.logoFile}" alt="N.O.E.L. emblem"
+             onerror="this.style.display='none';document.getElementById('loginFallback').classList.remove('hidden')">
+        <div id="loginFallback" class="login-fallback hidden">N.O.E.L.</div>
+        <h1 class="gold">N.O.E.L.</h1>
+        <p class="small">NATIONAL OFFICE OF EMOJI LIAISON</p>
+        <p>Welcome, Agent. Please authenticate your credentials to access the operational system.</p>
+        <form onsubmit="login(event)">
+          <label for="agent">Agent identification</label>
+          <input id="agent" autocomplete="username" value="${CONFIG.agentId}" required>
+          <label for="access">Access code</label>
+          <input id="access" type="password" autocomplete="current-password"
+                 placeholder="Enter your access code" required>
+          <div class="error" id="loginError"></div>
+          <button class="btn" type="submit">Authenticate agent</button>
+        </form>
+        <p class="small" style="margin-top:24px">UNAUTHORISED ACCESS IS STRICTLY DISCOURAGED.</p>
+      </section>
+    </div>
+  `, "login");
+}
+
+function login(event) {
+  event.preventDefault();
+  const agent = document.getElementById("agent").value.trim().toUpperCase();
+  const access = document.getElementById("access").value.trim();
+  if (agent === CONFIG.agentId.toUpperCase() && access === CONFIG.accessCode) {
+    progress.loggedIn = true;
+    saveProgress();
+    dashboard();
+  } else {
+    document.getElementById("loginError").textContent =
+      "Credentials not recognised. Please check your identification.";
+  }
+}
+
+// ============================================================
+// OPERATIONS DASHBOARD
+// ============================================================
+
+function dashboard() {
+  const completedCount = CONFIG.operations.filter(caseDone).length;
+  const cards = CONFIG.operations.map((op, i) => {
+    const done = caseDone(op);
+    const lost = phaseDone(op.id, "lost");
+    const found = phaseDone(op.id, "found");
+    let status = done ? "CASE RESOLVED" :
+      found ? "FOUND PHASE COMPLETE" :
+      lost ? "FOUND PHASE UNLOCKED" : "AWAITING INVESTIGATION";
+
+    return `
+      <article class="case ${done ? "done" : ""}" onclick="openOperation('${op.id}')">
+        <div class="case-status">CASE FILE 00${i + 1} // ${status}</div>
+        <div class="case-emoji">${op.emoji}</div>
+        <h3>${op.title}</h3>
+        <div class="small">${done ? "Investigation successfully concluded." : "Select to access case file."}</div>
+        ${done ? `<div class="case-word">${op.codeWord}</div>` : ""}
+      </article>`;
+  }).join("");
+
+  showScreen(`
+    <div class="toolbar">
+      <div class="eyebrow">ELF FIELD OPERATIONS // CHRISTMAS MOBILISATION</div>
+      <div class="small">AGENT: ${CONFIG.agentId}</div>
+    </div>
+    <section class="dashboard-intro">
+      <div class="eyebrow">OPERATIONAL HEADQUARTERS</div>
+      <h1>Good morning, Agent.</h1>
+      <p>Reports have been received of emoji escaping the Digital Realm and appearing in the physical world. Six cases require your attention.</p>
+      <p>Investigate each disappearance, locate the missing emoji and recover the evidence. Christmas cheer depends on it.</p>
+    </section>
+    <div class="progress-wrap">
+      <div class="toolbar">
+        <span class="eyebrow">OVERALL CASE PROGRESS</span>
+        <strong class="gold">${completedCount} / 6 RESOLVED</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${completedCount / 6 * 100}%"></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <h2>Active case files</h2>
+      <span class="small">Select any case to begin.</span>
+    </div>
+    <div class="grid">${cards}</div>
+    ${allCasesDone() ? `
+      <section class="reward">
+        <div class="eyebrow">ALL SIX CASES RESOLVED</div>
+        <h2 class="gold">The final investigation awaits.</h2>
+        <p>All six code words have been recovered. A final message requires your attention.</p>
+        <button class="btn" onclick="finalPuzzle()">Access final investigation</button>
+      </section>
+    ` : ""}
+    ${progress.finalComplete ? `
+      <section class="reward">
+        <div class="eyebrow">FINAL INVESTIGATION COMPLETE</div>
+        <h2 class="gold">Christmas has been restored.</h2>
+        <button class="btn" onclick="finalSummary()">View final report</button>
+      </section>
+    ` : ""}
+  `, "dashboard");
+}
+
+// ============================================================
+// OPERATION DETAILS AND TWO PHASES
+// ============================================================
+
+function openOperation(id) {
+  currentOperation = CONFIG.operations.find(op => op.id === id);
+  if (!currentOperation) return;
+  renderOperation();
+}
+
+function renderOperation() {
+  const op = currentOperation;
+  const lostDone = phaseDone(op.id, "lost");
+  const foundDone = phaseDone(op.id, "found");
+  const done = caseDone(op);
+
+  const phaseHTML = (phase, data, complete, locked) => `
+    <section class="phase ${complete ? "complete" : locked ? "locked" : "active"}">
+      <div class="phase-heading">
+        <div>
+          <div class="eyebrow">PHASE ${phase === "lost" ? "01" : "02"}</div>
+          <h2>${phase.toUpperCase()}</h2>
+        </div>
+        <span class="status-pill ${complete ? "done" : ""}">
+          ${complete ? "COMPLETED" : locked ? "LOCKED" : "ACTIVE"}
+        </span>
+      </div>
+      ${locked ? `
+        <p>Complete the LOST investigation before this phase can be accessed.</p>
+      ` : complete ? `
+        <p class="gold">Location confirmed: ${data.destination}</p>
+        <p class="small">Evidence successfully verified and recorded.</p>
+      ` : `
+        <p class="small">DESTINATION: ${data.destination}</p>
+        <p>${data.prompt}</p>
+        <form onsubmit="submitAnswer(event, '${phase}')">
+          <label for="answer-${phase}">Enter your finding</label>
+          <div class="answer-row">
+            <input id="answer-${phase}" autocomplete="off" placeholder="Your answer..." required>
+            <button class="btn" type="submit">Submit</button>
+          </div>
+          <div id="feedback-${phase}" class="feedback"></div>
+        </form>
+        <button class="back small" onclick="showHint('${phase}')">Request an evidence hint</button>
+        <div id="hint-${phase}" class="small"></div>
+      `}
+    </section>`;
+
+  showScreen(`
+    <div class="toolbar">
+      <button class="back" onclick="dashboard()">← BACK TO OPERATIONS</button>
+      <span class="eyebrow">CASE FILE // ${op.id.toUpperCase()}</span>
+    </div>
+    <div class="eyebrow">${op.emoji} // ACTIVE INVESTIGATION</div>
+    <h1>${op.title}</h1>
+    <p>${op.summary}</p>
+    <div class="panel">
+      <div class="eyebrow">INVESTIGATION STATUS</div>
+      <p>${done ? "This case has been successfully resolved." :
+        lostDone ? "The initial sighting has been confirmed. Proceed with recovery." :
+        "The initial sighting must be investigated before recovery can begin."}</p>
+    </div>
+    ${phaseHTML("lost", op.lost, lostDone, false)}
+    ${phaseHTML("found", op.found, foundDone, !lostDone)}
+    ${done ? `
+      <section class="reward">
+        <div class="eyebrow">OPERATION SUCCESSFULLY COMPLETED</div>
+        <h2 class="gold">Emoji recovered.</h2>
+        <p>The two destination experiences associated with this operation are now confirmed.</p>
+        <div class="experience"><strong>LOST // ${op.lost.destination}</strong>${op.experiences.lost}</div>
+        <div class="experience"><strong>FOUND // ${op.found.destination}</strong>${op.experiences.found}</div>
+        <div class="eyebrow">RECOVERED CODE WORD</div>
+        <div class="reward-word">${op.codeWord}</div>
+        <button class="btn" onclick="dashboard()">Return to operations</button>
+      </section>
+    ` : ""}
+  `, "operation");
+}
+
+function normaliseAnswer(value) {
+  return value.trim().toUpperCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ");
+}
+
+function submitAnswer(event, phase) {
+  event.preventDefault();
+  const op = currentOperation;
+  const data = op[phase];
+  const input = document.getElementById("answer-" + phase);
+  const feedback = document.getElementById("feedback-" + phase);
+
+  if (normaliseAnswer(input.value) === normaliseAnswer(data.answer)) {
+    progress.phases[op.id + "-" + phase] = true;
+    if (phase === "found") {
+      progress.completed[op.id] = true;
+    }
+    saveProgress();
+    renderOperation();
+  } else {
+    feedback.textContent = "That finding does not match the available evidence. Try again, Agent.";
+    feedback.className = "feedback bad";
+  }
+}
+
+function showHint(phase) {
+  const op = currentOperation;
+  document.getElementById("hint-" + phase).textContent =
+    "EVIDENCE NOTE: " + op[phase].hint;
+}
+
+// ============================================================
+// FINAL PUZZLE
+// ============================================================
+
+function finalPuzzle() {
+  if (!allCasesDone()) return dashboard();
+
+  // Start with words in a deliberately mixed order.
+  const words = CONFIG.finalWords.slice();
+  const shuffled = ["CHRISTMAS", "WANT", "ALL", "IS", "I", "FOR"];
+  wordSlots = Array(7).fill(null);
+
+  showScreen(`
+    <div class="toolbar">
+      <button class="back" onclick="dashboard()">← BACK TO OPERATIONS</button>
+      <span class="eyebrow">CLASSIFICATION: FINAL</span>
+    </div>
+    <div class="eyebrow">FINAL INVESTIGATION // 001</div>
+    <h1>The missing message.</h1>
+    <p>All six cases have been resolved. Six words have been recovered, but their order remains uncertain.</p>
+    <p>Arrange the words to reconstruct the message. There are seven positions, but the final position remains locked until the first six are correct.</p>
+
+    <div class="panel">
+      <div class="eyebrow">RECOVERED WORDS</div>
+      <div id="wordBank" class="word-bank">
+        ${shuffled.map((w, i) => `<button class="word" draggable="true"
+          data-word="${w}" onclick="placeWord('${w}')"
+          ondragstart="dragWord(event, '${w}')">${w}</button>`).join("")}
+      </div>
+      <div class="eyebrow" style="text-align:center">MESSAGE SEQUENCE</div>
+      <div id="slots" class="slots">
+        ${wordSlots.map((w, i) => slotHTML(i, w)).join("")}
+      </div>
+      <div id="finalFeedback" class="feedback" style="text-align:center"></div>
+      <div style="text-align:center">
+        <button class="btn" onclick="checkWordOrder()">Verify message</button>
+        <button class="btn secondary" onclick="clearWordSlots()">Clear positions</button>
+      </div>
+    </div>
+    <div id="emojiStage"></div>
+  `, "final");
+  updateWordBank();
+}
+
+function slotHTML(index, word) {
+  const locked = index === 6 && !finalChecked;
+  return `<div class="slot ${word ? "filled" : ""} ${locked ? "locked" : ""}"
+    data-slot="${index}"
+    ondragover="allowDrop(event)"
+    ondrop="dropWord(event, ${index})"
+    onclick="removeSlot(${index})">
+    <small>${index + 1}</small>
+    ${locked ? "🔒" : (word || "DROP WORD")}
+  </div>`;
+}
+
+function updateWordBank() {
+  const bank = document.getElementById("wordBank");
+  if (!bank) return;
+  const remaining = ["CHRISTMAS", "WANT", "ALL", "IS", "I", "FOR"]
+    .filter(w => !wordSlots.includes(w));
+  bank.innerHTML = remaining.map(w => `
+    <button class="word" draggable="true" data-word="${w}"
+      onclick="placeWord('${w}')" ondragstart="dragWord(event, '${w}')">${w}</button>
+  `).join("");
+  const slots = document.getElementById("slots");
+  slots.innerHTML = wordSlots.map((w, i) => slotHTML(i, w)).join("");
+}
+
+function placeWord(word) {
+  if (wordSlots.includes(word)) return;
+  const empty = wordSlots.findIndex((v, i) => v === null && i < 6);
+  if (empty === -1) return;
+  wordSlots[empty] = word;
+  updateWordBank();
+}
+
+function removeSlot(index) {
+  if (index >= 6 || !wordSlots[index]) return;
+  wordSlots[index] = null;
+  finalChecked = false;
+  updateWordBank();
+  document.getElementById("emojiStage").innerHTML = "";
+  document.getElementById("finalFeedback").textContent = "";
+}
+
+function clearWordSlots() {
+  wordSlots = Array(7).fill(null);
+  finalChecked = false;
+  updateWordBank();
+  document.getElementById("emojiStage").innerHTML = "";
+  document.getElementById("finalFeedback").textContent = "";
+}
+
+function dragWord(event, word) {
+  event.dataTransfer.setData("text/plain", word);
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function dropWord(event, index) {
+  event.preventDefault();
+  if (index === 6 && !finalChecked) return;
+  const word = event.dataTransfer.getData("text/plain");
+  if (!word || !CONFIG.finalWords.includes(word)) return;
+
+  // Move an existing word if dropped onto an occupied slot.
+  const existing = wordSlots[index];
+  const oldIndex = wordSlots.indexOf(word);
+  if (oldIndex !== -1) wordSlots[oldIndex] = existing;
+  wordSlots[index] = word;
+  updateWordBank();
+}
+
+function checkWordOrder() {
+  const feedback = document.getElementById("finalFeedback");
+  const firstSix = wordSlots.slice(0, 6);
+  if (firstSix.some(w => !w)) {
+    feedback.textContent = "All six positions must be filled before verification.";
+    feedback.className = "feedback bad";
+    return;
+  }
+  const correct = CONFIG.finalWords.every((w, i) => firstSix[i] === w);
+  if (!correct) {
+    feedback.textContent = "Message sequence not verified. Re-examine the evidence.";
+    feedback.className = "feedback bad";
+    return;
+  }
+
+  finalChecked = true;
+  feedback.textContent = "MESSAGE VERIFIED. FINAL POSITION UNLOCKED.";
+  feedback.className = "feedback good";
+  wordSlots[6] = null;
+  updateWordBank();
+  showEmojiChoices();
+}
+
+function showEmojiChoices() {
+  document.getElementById("emojiStage").innerHTML = `
+    <section class="reward">
+      <div class="eyebrow">FINAL IDENTIFICATION REQUIRED</div>
+      <h2 class="gold">One final emoji remains.</h2>
+      <p>Based on all available evidence, select the emoji that completes the message.</p>
+      <div class="slots">
+        <div class="slot filled">${CONFIG.finalWords[0]}</div>
+        <div class="slot filled">${CONFIG.finalWords[1]}</div>
+        <div class="slot filled">${CONFIG.finalWords[2]}</div>
+        <div class="slot filled">${CONFIG.finalWords[3]}</div>
+        <div class="slot filled">${CONFIG.finalWords[4]}</div>
+        <div class="slot filled">${CONFIG.finalWords[5]}</div>
+        <div class="slot" id="seventhSlot">?</div>
+      </div>
+      <div class="emoji-options">
+        ${CONFIG.emojiChoices.map(e => `
+          <button class="emoji-choice" onclick="selectEmoji('${e}')" aria-label="Select ${e}">${e}</button>
+        `).join("")}
+      </div>
+      <div id="emojiFeedback" class="feedback"></div>
+    </section>
+  `;
+}
+
+function selectEmoji(emoji) {
+  const feedback = document.getElementById("emojiFeedback");
+  if (emoji === "🐑") {
+    wordSlots[6] = emoji;
+    progress.finalComplete = true;
+    saveProgress();
+    celebrate();
+    setTimeout(finalReveal, 1000);
+  } else {
+    feedback.textContent = "That emoji does not complete the message. Investigate further.";
+    feedback.className = "feedback bad";
+  }
+}
+
+// ============================================================
+// CELEBRATION AND FINAL REPORT
+// ============================================================
+
+function celebrate() {
+  const container = document.getElementById("confetti");
+  const pieces = 120;
+  for (let i = 0; i < pieces; i++) {
+    const el = document.createElement("div");
+    el.className = "confetti-piece";
+    el.style.left = Math.random() * 100 + "%";
+    el.style.background = ["#d2b27d", "#f3eee4", "#8eaa9b", "#a75d58"][i % 4];
+    el.style.animationDelay = Math.random() * 1.2 + "s";
+    el.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+}
+
+function finalReveal() {
+  showScreen(`
+    <section class="final-banner">
+      <div class="eyebrow">N.O.E.L. // FINAL REPORT</div>
+      <div class="big-sheep">🐑</div>
+      <h1 class="gold">CHRISTMAS RESTORED.</h1>
+      <p style="font-size:22px">All I want for Christmas is <strong class="gold">EWE.</strong></p>
+      <p>All six investigations have been completed. The missing emoji has been identified and the festive situation is now under control.</p>
+      <p class="eyebrow">THANK YOU, AGENT.</p>
+      <button class="btn" onclick="finalSummary()">View final case report</button>
+    </section>
+  `, "reveal");
+}
+
+function finalSummary() {
+  const summaries = CONFIG.operations.map((op, i) => `
+    <div class="summary-case">
+      <div class="eyebrow">CASE FILE 00${i + 1}</div>
+      <h3>${op.emoji} ${op.title}</h3>
+      <div class="experience"><strong>LOST // ${op.lost.destination}</strong>${op.experiences.lost}</div>
+      <div class="experience"><strong>FOUND // ${op.found.destination}</strong>${op.experiences.found}</div>
+      <div class="small">RECOVERED WORD: <span class="gold">${op.codeWord}</span></div>
+    </div>
+  `).join("");
+
+  showScreen(`
+    <div class="toolbar">
+      <button class="back" onclick="dashboard()">← OPERATIONS DASHBOARD</button>
+      <span class="eyebrow">FINAL REPORT // DECLASSIFIED</span>
+    </div>
+    <div class="eyebrow">NATIONAL OFFICE OF EMOJI LIAISON</div>
+    <h1 class="gold">Mission accomplished.</h1>
+    <p>Agent ${CONFIG.agentId}, the following operations have been successfully concluded. The destination experiences are recorded below.</p>
+    <div class="panel">
+      <div class="eyebrow">FINAL MESSAGE</div>
+      <h2>ALL I WANT FOR CHRISTMAS IS 🐑</h2>
+      <p>All cases resolved. Christmas restored. Ewe identified.</p>
+    </div>
+    <h2>Resolved operations</h2>
+    ${summaries}
+    <div class="reward">
+      <h2 class="gold">N.O.E.L. thanks you for your service.</h2>
+      <p>Have a wonderful Christmas.</p>
+    </div>
+  `, "summary");
+}
+
+// ============================================================
+// RESET / STARTUP
+// ============================================================
+
+function resetProgress() {
+  if (!confirm("Reset all N.O.E.L. progress on this browser? This cannot be undone.")) return;
+  progress = freshProgress();
+  saveProgress();
+  currentOperation = null;
+  goLogin();
+}
+
+function start() {
+  if (progress.loggedIn) {
+    dashboard();
+  } else {
+    goLogin();
+  }
+}
+
+start();
+</script>
+</body>
+</html>
