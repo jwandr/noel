@@ -663,7 +663,7 @@ function initialiseNoelSystem() {
   const startTime = Date.now();
   const updateProgress = () => {
     const elapsed = Date.now() - startTime;
-    const percent = Math.min(100, Math.floor(elapsed / 10000 * 100));
+    const percent = Math.min(100, Math.floor(elapsed / 20000 * 100));
     const fill = document.getElementById("boot-progress-fill");
     const number = document.getElementById("boot-percent");
     const bar = document.getElementById("boot-progress");
