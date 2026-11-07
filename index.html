@@ -323,6 +323,137 @@ input {
 .btn:hover {
   transform: translateY(-1px);
 }
+
+/* ----------------------------------
+   N.O.E.L. CASE FILE DESIGN
+---------------------------------- */
+
+.case {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(145deg, #1b443c 0%, #173b35 100%);
+  border: 1px solid #657c6c;
+  border-radius: 12px;
+  padding: 25px;
+  min-height: 225px;
+  box-shadow:
+    0 3px 8px #00000020,
+    inset 0 1px 0 #ffffff0b;
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.case:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 22px #00000035;
+  border-color: var(--gold);
+}
+
+/* Classification heading */
+.case::before {
+  content: "N.O.E.L. / FIELD DIVISION";
+  display: block;
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d2b27d55;
+  opacity: 0.85;
+}
+
+/* File reference */
+.case-number {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* Emoji and operation title */
+.case-emoji {
+  font-size: 30px;
+  margin: 13px 0 9px;
+}
+
+.case h3 {
+  color: var(--ivory);
+  letter-spacing: 0.3px;
+  margin: 5px 0 9px;
+}
+
+/* Case status */
+.case-status {
+  color: var(--muted);
+}
+
+/* Recovered word */
+.case-word {
+  margin-top: 17px;
+  padding-top: 12px;
+  border-top: 1px solid #d2b27d55;
+  color: var(--gold);
+  font: bold 15px Arial, sans-serif;
+  letter-spacing: 2px;
+}
+
+/* Completed folder */
+.case.done {
+  border-color: var(--gold);
+  background:
+    linear-gradient(145deg, #204b40 0%, #173b35 100%);
+}
+
+/* ----------------------------------
+   COMPLETE RUBBER STAMP
+---------------------------------- */
+
+.case.done::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 175px;
+  height: 105px;
+  background-image: url("complete-stamp.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transform: translate(-50%, -50%) rotate(-17deg);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 10;
+  animation: stampArrival 0.45s ease-out;
+}
+
+@keyframes stampArrival {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-17deg) scale(1.5);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-17deg) scale(0.95);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) rotate(-17deg) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .case.done::after {
+    width: 145px;
+    height: 90px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -618,7 +749,9 @@ function dashboard() {
 
     return `
       <article class="case ${done ? "done" : ""}" onclick="openOperation('${op.id}')">
-        <div class="case-status">CASE FILE 00${i + 1} // ${status}</div>
+        <div class="case-number">
+          CASE FILE 00${i + 1} // ${status}
+        </div>
         <div class="case-emoji">${op.emoji}</div>
         <h3>${op.title}</h3>
         <div class="small">${done ? "Investigation successfully concluded." : "Select to access case file."}</div>
