@@ -61,7 +61,7 @@ label { font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:
 .case h3 { margin:5px 0 9px; letter-spacing:.3px; }
 .case-status { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; }
 .case.done { border-color:#8d7449; }
-.case.done::before { content:"FOUND" !important; background:#a9433d; }
+.case.done::before { content: "FOUND" !important; background:#a9433d; }
 .case-word { margin-top:17px; padding-top:12px; border-top:1px solid #bba77f; color:#263b32; font:bold 15px Arial,sans-serif; letter-spacing:2px; }
 .case.done::after { content:""; position:absolute; z-index:4; top:50%; left:50%; width:275px; height:150px; background:url("found.png") center/contain no-repeat; transform:translate(-50%,-60%); opacity:.9; pointer-events:none; animation:stampArrival .45s ease-out; }
 @keyframes stampArrival { 0%{opacity:0;transform:translate(-50%,-60%) scale(1.5)} 70%{opacity:1;transform:translate(-50%,-60%) scale(.95)} 100%{opacity:.9;transform:translate(-50%,-60%) scale(1)} }
