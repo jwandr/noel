@@ -562,7 +562,7 @@ function toggleNoelSound(button) {
 function initialiseNoelSystem() {
   noelBootTimers.forEach(clearTimeout);
   noelBootTimers = [];
-  noelSoundEnabled = false;
+  noelSoundEnabled = true;
   const fileRows = CONFIG.operations.map((op, index) => `
     <div class="boot-file" id="boot-file-${index}">
       <span>00${index + 1} // ${op.title.replace(/^Operation\s+/i, "").toUpperCase()}</span>
