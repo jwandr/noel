@@ -6,7 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>N.O.E.L. | National Office of Emoji Liaison</title>
 <style>
-
+:root {
+  --navy: #102f2b;
+  --gold: #d2b27d;
+  --ivory: #f3eee4;
+  --slate: #19423b;
+  --muted: #b0bdb7;
+  --green: #719b7d;
+  --red: #b66e64;
+}
 * { box-sizing: border-box; }
 body {
   margin: 0;
@@ -68,8 +76,8 @@ p { line-height: 1.65; color: #d6dce1; }
 .btn:disabled { opacity: .35; cursor: not-allowed; }
 .btn.small-btn { padding: 9px 13px; font-size: 10px; }
 input {
-  width: 100%; padding: 14px; border: 1px solid #667586;
-  background: #14273b; color: white; margin: 7px 0 18px;
+  width: 100%; padding: 14px; border: 1px solid #668666;
+  background: #143b20; color: white; margin: 7px 0 18px;
 }
 label {
   font: 11px Arial, sans-serif; letter-spacing: 1.5px;
@@ -83,7 +91,7 @@ label {
   min-height: 85vh; display: grid; place-items: center;
 }
 .login-card {
-  width: min(100%, 440px); text-align: center;
+  width: min(100%, 600px); text-align: center;
   padding: 35px; border: 1px solid var(--gold);
 }
 .login-logo {
@@ -103,7 +111,7 @@ label {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
 }
 .case {
-  background: #14273b; border: 1px solid #566678;
+  background: #143b15; border: 1px solid #56785d;
   padding: 22px; min-height: 205px; cursor: pointer;
   transition: .2s; position: relative;
 }
@@ -123,7 +131,7 @@ label {
   letter-spacing: 2px;
 }
 .progress-wrap { margin: 25px 0 35px; }
-.progress-track { height: 5px; background: #34475a; margin-top: 10px; }
+.progress-track { height: 5px; background: #345a40; margin-top: 10px; }
 .progress-fill { height: 5px; background: var(--gold); width: 0; transition: .3s; }
 .toolbar {
   display: flex; justify-content: space-between; align-items: center;
@@ -131,15 +139,15 @@ label {
 }
 .back { color: var(--gold); background: none; border: none; padding: 8px 0; }
 .phase {
-  border: 1px solid #687789; padding: 22px; margin: 15px 0;
-  background: #14273b;
+  border: 1px solid #688971; padding: 22px; margin: 15px 0;
+  background: #143b19;
 }
 .phase.active { border-color: var(--gold); }
 .phase.complete { border-color: var(--green); }
 .phase.locked { opacity: .5; }
 .phase-heading { display: flex; justify-content: space-between; gap: 10px; }
 .status-pill {
-  border: 1px solid #82909c; padding: 5px 9px;
+  border: 1px solid #829c86; padding: 5px 9px;
   font: 9px Arial, sans-serif; letter-spacing: 1px;
   text-transform: uppercase; white-space: nowrap;
 }
@@ -152,14 +160,14 @@ label {
 .feedback.bad { color: #efaaa3; }
 .reward {
   border: 1px solid var(--gold); padding: 25px;
-  text-align: center; margin-top: 25px; background: #172b3e;
+  text-align: center; margin-top: 25px; background: #173e1d;
 }
 .reward-word {
   font: bold 32px Arial, sans-serif; color: var(--gold);
   letter-spacing: 4px; margin: 15px;
 }
 .experience {
-  background: #20364a; padding: 14px; margin: 10px 0;
+  background: #204a2a; padding: 14px; margin: 10px 0;
   border-left: 2px solid var(--gold);
 }
 .experience strong {
@@ -179,24 +187,24 @@ label {
 .slot {
   width: 105px; min-height: 65px; border: 1px dashed var(--gold);
   display: grid; place-items: center; padding: 7px;
-  color: var(--gold); background: #14273b;
+  color: var(--gold); background: #143b1a;
   font: bold 12px Arial, sans-serif; text-align: center;
 }
-.slot.filled { border-style: solid; background: #20364a; }
+.slot.filled { border-style: solid; background: #204a2e; }
 .slot.locked { opacity: .35; border-color: #75808b; }
 .slot small { color: var(--muted); font: 9px Arial, sans-serif; }
 .emoji-choice {
-  font-size: 33px; background: #14273b;
-  border: 1px solid #667586; padding: 13px 18px;
+  font-size: 33px; background: #143b1a;
+  border: 1px solid #66866b; padding: 13px 18px;
 }
 .emoji-choice:hover { border-color: var(--gold); transform: scale(1.08); }
-.emoji-choice.selected { border: 2px solid var(--gold); background: #31465b; }
+.emoji-choice.selected { border: 2px solid var(--gold); background: #315b3e; }
 .final-banner {
   text-align: center; padding: 45px 20px;
-  background: #14273b; border: 1px solid var(--gold);
+  background: #143b1e; border: 1px solid var(--gold);
 }
 .big-sheep { font-size: 90px; margin: 15px; }
-.summary-case { border-bottom: 1px solid #526174; padding: 15px 0; }
+.summary-case { border-bottom: 1px solid #527453; padding: 15px 0; }
 .summary-case h3 { color: var(--gold); }
 footer {
   margin-top: 50px; padding: 20px 0;
@@ -232,16 +240,6 @@ footer {
    N.O.E.L. VISUAL REFRESH
    Forest green, gold, softer corners
    ========================================== */
-
-:root {
-  --navy: #102f2b;
-  --gold: #d2b27d;
-  --ivory: #f3eee4;
-  --slate: #19423b;
-  --muted: #b0bdb7;
-  --green: #719b7d;
-  --red: #b66e64;
-}
 /* Modern sans-serif typography throughout */
 body,
 button,
@@ -575,8 +573,6 @@ function goLogin() {
         <img class="login-logo" src="${CONFIG.logoFile}" alt="N.O.E.L. emblem"
              onerror="this.style.display='none';document.getElementById('loginFallback').classList.remove('hidden')">
         <div id="loginFallback" class="login-fallback hidden">N.O.E.L.</div>
-        <h1 class="gold">N.O.E.L.</h1>
-        <p class="small">NATIONAL OFFICE OF EMOJI LIAISON</p>
         <p>Welcome, Agent. Please authenticate your credentials to access the operational system.</p>
         <form onsubmit="login(event)">
           <label for="agent">Agent identification</label>
