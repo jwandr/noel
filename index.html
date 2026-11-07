@@ -64,7 +64,7 @@ label { font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:
 .case.done::before { content: "FOUND" !important; background:var(--green); border: 1px solid var(--green); }
 .case-word { margin-top:17px; padding-top:12px; border-top:1px solid #bba77f; color:#263b32; font:bold 15px Arial,sans-serif; letter-spacing:2px; }
 .case.done::after { content:""; position:absolute; z-index:4; top:50%; left:50%; width:130px; height:150px; background:url("found-round.png") center/contain no-repeat; transform:translate(20%,-70%); opacity:.9; pointer-events:none; animation:stampArrival .45s ease-out; }
-@keyframes stampArrival { 0%{opacity:0;transform:translate(-50%,-60%) scale(1.5)} 70%{opacity:1;transform:translate(-50%,-60%) scale(.95)} 100%{opacity:.9;transform:translate(-50%,-60%) scale(1)} }
+@keyframes stampArrival { 0%{opacity:0;transform:translate(20%,-70%) scale(1.5)} 70%{opacity:1;transform:translate(20%,-70%) scale(.95)} 100%{opacity:.9;transform:translate(20%,-70%) scale(1)} }
 .progress-wrap { margin:15px 0; }
 .progress-track,.progress-fill { height:5px; }
 .progress-track { background:#345a40; margin-top:10px; }
