@@ -236,6 +236,104 @@ footer {
   .slot { width: 85px; min-height: 60px; }
   header { align-items: flex-start; }
 }
+
+/* ==========================================
+   N.O.E.L. VISUAL REFRESH
+   Forest green, gold, softer corners
+   ========================================== */
+
+:root {
+  --navy: #102f2b;
+  --gold: #d2b27d;
+  --ivory: #f3eee4;
+  --slate: #19423b;
+  --muted: #b0bdb7;
+  --green: #719b7d;
+  --red: #b66e64;
+}
+/* Modern sans-serif typography throughout */
+body,
+button,
+input,
+label,
+.word,
+.slot,
+.case-status,
+.status-pill,
+.eyebrow,
+.small,
+.brand-sub {
+  font-family: "Avenir Next", Avenir, "Segoe UI",
+               Helvetica, Arial, sans-serif;
+}
+/* Softer, more contemporary surfaces */
+.login-card,
+.case,
+.panel,
+.phase,
+.reward,
+.final-banner,
+.experience {
+  border-radius: 14px;
+}
+.btn {
+  border-radius: 8px;
+}
+input {
+  border-radius: 8px;
+}
+.brand-mark {
+  border-radius: 14px;
+}
+.word {
+  border-radius: 9px;
+}
+.slot {
+  border-radius: 10px;
+}
+.emoji-choice {
+  border-radius: 12px;
+}
+.case {
+  background: #173b35;
+}
+.phase {
+  background: #173b35;
+}
+.panel {
+  background: #19423b;
+}
+.reward {
+  background: #173b35;
+}
+.final-banner {
+  background: #173b35;
+}
+/* A little more breathing room */
+.case {
+  padding: 25px;
+}
+.phase {
+  padding: 26px;
+}
+.panel {
+  padding: 28px;
+}
+.login-card {
+  padding: 38px;
+}
+/* Softer interactions */
+.case,
+.btn,
+.emoji-choice {
+  transition: all 0.25s ease;
+}
+.case:hover {
+  box-shadow: 0 8px 24px #00000025;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
 </style>
 </head>
 <body>
