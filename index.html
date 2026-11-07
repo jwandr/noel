@@ -467,7 +467,7 @@ function renderOperation() {
   const lostDone = phaseDone(op.id, "lost");
   const foundDone = phaseDone(op.id, "found");
   const done = caseDone(op);
-const phaseHTML = (phase, data, complete, locked) => {
+const phaseHTML = (phase, data, experience, complete, locked) => {
   const phaseNumber = phase === "lost" ? "01" : "02";
   const status = complete ? "COMPLETED" :
     locked ? "LOCKED" : "ACTIVE";
@@ -489,8 +489,12 @@ const phaseHTML = (phase, data, complete, locked) => {
       ${locked ? `
         <p>This investigation remains sealed pending completion of the preceding phase.</p>
       ` : complete ? `
-        <p class="gold">LOCATION CONFIRMED: ${data.destination}</p>
+        <p class="gold">LOCATION CONFIRMED: ${data.answer}</p>
         <p class="small">Evidence successfully verified and entered into the N.O.E.L. archive.</p>
+        <div class="experience">
+          <strong>${phase.toUpperCase()} // ${data.destination}</strong>
+          ${experience}
+        </div>
       ` : `
         <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
@@ -519,16 +523,14 @@ const phaseHTML = (phase, data, complete, locked) => {
     <h1>${op.emoji} ${op.title}</h1>
     <p>${op.summary}</p>
     <div class="phase-grid">
-      ${phaseHTML("lost", op.lost, lostDone, false)}
-      ${phaseHTML("found", op.found, foundDone, !lostDone)}
+      ${phaseHTML("lost", op.lost, op.experiences.lost, lostDone, false)}
+      ${phaseHTML("found", op.found, op.experiences.found, foundDone, !lostDone)}
     </div>
     ${done ? `
       <section class="reward">
         <div class="eyebrow">OPERATION SUCCESSFULLY COMPLETED</div>
         <h2 class="gold">Emoji recovered.</h2>
         <p>The two destination experiences associated with this operation are now confirmed.</p>
-        <div class="experience"><strong>LOST // ${op.lost.destination}</strong>${op.experiences.lost}</div>
-        <div class="experience"><strong>FOUND // ${op.found.destination}</strong>${op.experiences.found}</div>
         <div class="eyebrow">RECOVERED CODE WORD</div>
         <div class="reward-word">${op.codeWord}</div>
         <button class="btn" onclick="dashboard()">Return to operations</button>
