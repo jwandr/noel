@@ -130,6 +130,11 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
   .phase-grid {    grid-template-columns: 1fr;  }
 }
 .phase-grid .phase {  height: 100%;}
+.choice-grid {  display: grid;  grid-template-columns: repeat(2, minmax(0, 1fr));  gap: 10px;  margin-top: 12px;}
+.choice-button {  width: 100%;  text-transform: none;  letter-spacing: 0;  font-size: 14px;  padding: 14px 10px;}
+@media (max-width: 480px) {
+  .choice-grid {    grid-template-columns: 1fr;  }
+}
 </style>
 </head>
 <body>
@@ -177,13 +182,15 @@ const CONFIG = {
         destination: "Perth",
         prompt: "A mysterious sighting has been reported in Perth. Find the location indicated by the evidence.",
         answer: "KINGS PARK",
-        hint: "For this framework, the test answer is KINGS PARK."
+        hint: "For this framework, the test answer is KINGS PARK.",
+        options: ["KINGS PARK", "COTTESLOE BEACH", "FREMANTLE", "PERTH ZOO"]
       },
       found: {
         destination: "Rwanda",
         prompt: "The trail has gone international. Identify the next location from the evidence.",
         answer: "KIGALI",
-        hint: "For this framework, the test answer is KIGALI."
+        hint: "For this framework, the test answer is KIGALI.",
+        options: ["KIGALI", "NAIROBI", "CAPE TOWN", "ADDIS ABABA"]
       },
       codeWord: "CHRISTMAS",
       experiences: {
@@ -487,15 +494,17 @@ const phaseHTML = (phase, data, complete, locked) => {
       ` : `
         <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
-        <form onsubmit="submitAnswer(event, '${phase}')">
-          <label for="answer-${phase}">Enter your finding</label>
-          <div class="answer-row">
-            <input id="answer-${phase}" autocomplete="off"
-              placeholder="Your answer..." required>
-            <button class="btn" type="submit">Submit</button>
-          </div>
-          <div id="feedback-${phase}" class="feedback"></div>
-        </form>
+        <div class="choice-grid">
+          ${data.options.map(option => `
+            <button
+              class="btn secondary choice-button"
+              onclick="submitChoice('${phase}', '${option.replace(/'/g, "\\'")}')"
+            >
+              ${option}
+            </button>
+          `).join("")}
+        </div>
+        <div id="feedback-${phase}" class="feedback"></div>
         <button class="back small" onclick="showHint('${phase}')">
           Request an evidence hint
         </button>
@@ -530,17 +539,18 @@ const phaseHTML = (phase, data, complete, locked) => {
 function normaliseAnswer(value) {
   return value.trim().toUpperCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ");
 }
-function submitAnswer(event, phase) {
-  event.preventDefault();
+function submitChoice(phase, selectedAnswer) {
   const op = currentOperation;
   const data = op[phase];
-  const input = document.getElementById("answer-" + phase);
   const feedback = document.getElementById("feedback-" + phase);
-  if (normaliseAnswer(input.value) === normaliseAnswer(data.answer)) {
+
+  if (normaliseAnswer(selectedAnswer) === normaliseAnswer(data.answer)) {
     progress.phases[op.id + "-" + phase] = true;
+
     if (phase === "found") {
       progress.completed[op.id] = true;
     }
+
     saveProgress();
     renderOperation();
   } else {
