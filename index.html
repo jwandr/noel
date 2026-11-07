@@ -419,13 +419,13 @@ input {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 175px;
-  height: 105px;
+  width: 275px;
+  height: 150px;
   background-image: url("complete-stamp.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  transform: translate(-50%, -50%) rotate(-17deg);
+  transform: translate(-50%, -60%);
   opacity: 0.9;
   pointer-events: none;
   z-index: 10;
@@ -755,7 +755,7 @@ function dashboard() {
         <div class="case-emoji">${op.emoji}</div>
         <h3>${op.title}</h3>
         <div class="small">${done ? "Investigation successfully concluded." : "Select to access case file."}</div>
-        ${done ? `<div class="case-word">${op.codeWord}</div>` : ""}
+        ${done ? `<div class="case-word">CASE WORD: ${op.codeWord}</div>` : ""}
       </article>`;
   }).join("");
 
