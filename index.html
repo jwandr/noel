@@ -454,6 +454,180 @@ input {
   }
 }
 
+/* ----------------------------------
+   INVESTIGATION PHASE FILES
+---------------------------------- */
+
+.phase {
+  position: relative;
+  background: #173b35;
+  border: 1px solid #526d5e;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 18px 0;
+  transition: border-color 0.25s ease;
+}
+
+.phase.active {
+  border-color: #d2b27d;
+}
+
+.phase.complete {
+  border-color: #719b7d;
+}
+
+.phase.locked {
+  opacity: 0.65;
+  border-style: dashed;
+}
+
+.phase-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.phase-number {
+  color: #d2b27d;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.phase-heading h2 {
+  margin: 7px 0 0;
+  font-size: 25px;
+  letter-spacing: 1px;
+}
+
+.phase-file-divider {
+  height: 1px;
+  background: #d2b27d45;
+  margin: 19px 0;
+}
+
+.phase-destination {
+  color: #d2b27d;
+  font: 10px "Avenir Next", Avenir, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+/* Status indicator */
+
+.phase-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid;
+  border-radius: 6px;
+  font: bold 9px "Avenir Next", Avenir, sans-serif;
+  letter-spacing: 1.2px;
+  white-space: nowrap;
+}
+
+.phase-status-icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.phase-status-indicator.active {
+  color: #d2b27d;
+  border-color: #d2b27d;
+  background: #d2b27d12;
+}
+
+.phase-status-indicator.locked {
+  color: #b0bdb7;
+  border-color: #71857b;
+  background: #b0bdb710;
+}
+
+.phase-status-indicator.completed {
+  color: #a6d4b9;
+  border-color: #719b7d;
+  background: #719b7d18;
+}
+
+@media(max-width:480px) {
+  .phase-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .phase-status-indicator {
+    align-self: flex-start;
+  }
+}
+
+/* ----------------------------------
+   ARCHIVAL CASE FILE DETAILS
+---------------------------------- */
+
+.case {
+  padding-top: 32px;
+  background:
+    linear-gradient(145deg, #1c443c, #173b35);
+  border: 1px solid #657c6c;
+}
+
+/* Folder tab */
+.case::before {
+  content: "N.O.E.L. // CLASSIFIED";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: auto;
+  height: 20px;
+  padding: 4px 12px;
+  background: #d2b27d;
+  color: #102f2b;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  border-radius: 0 0 5px 5px;
+}
+
+/* File number */
+.case-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d2b27d35;
+}
+
+/* Archive marker */
+.case-number::after {
+  content: "E.L.F.";
+  color: #d2b27d;
+  font-size: 9px;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* Add a small archival footer */
+.case .small {
+  font-size: 11px;
+  margin-top: 10px;
+}
+
+/* Completed folder tab */
+.case.done::before {
+  background: #719b7d;
+}
+
+/* Slightly more tactile folder appearance */
+.case {
+  box-shadow:
+    0 4px 8px #00000025,
+    inset 0 1px 0 #ffffff12;
+}
+
+
 </style>
 </head>
 <body>
@@ -813,34 +987,55 @@ function renderOperation() {
   const foundDone = phaseDone(op.id, "found");
   const done = caseDone(op);
 
-  const phaseHTML = (phase, data, complete, locked) => `
+  
+const phaseHTML = (phase, data, complete, locked) => {
+  const phaseNumber = phase === "lost" ? "01" : "02";
+
+  const status = complete ? "COMPLETED" :
+    locked ? "LOCKED" : "ACTIVE";
+
+  const icon = complete ? "✓" :
+    locked ? "🔒" : "◎";
+
+  return `
     <section class="phase ${complete ? "complete" : locked ? "locked" : "active"}">
+
       <div class="phase-heading">
-        <div>
-          <div class="eyebrow">PHASE ${phase === "lost" ? "01" : "02"}</div>
+        <div class="phase-title-group">
+          <div class="phase-number">EVIDENCE STAGE ${phaseNumber}</div>
           <h2>${phase.toUpperCase()}</h2>
         </div>
-        <span class="status-pill ${complete ? "done" : ""}">
-          ${complete ? "COMPLETED" : locked ? "LOCKED" : "ACTIVE"}
-        </span>
+
+        <div class="phase-status-indicator ${status.toLowerCase()}">
+          <span class="phase-status-icon">${icon}</span>
+          <span>${status}</span>
+        </div>
       </div>
+
+      <div class="phase-file-divider"></div>
+
       ${locked ? `
-        <p>Complete the LOST investigation before this phase can be accessed.</p>
+        <p>This investigation remains sealed pending completion of the preceding phase.</p>
       ` : complete ? `
-        <p class="gold">Location confirmed: ${data.destination}</p>
-        <p class="small">Evidence successfully verified and recorded.</p>
+        <p class="gold">LOCATION CONFIRMED: ${data.destination}</p>
+        <p class="small">Evidence successfully verified and entered into the N.O.E.L. archive.</p>
       ` : `
-        <p class="small">DESTINATION: ${data.destination}</p>
+        <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
+
         <form onsubmit="submitAnswer(event, '${phase}')">
           <label for="answer-${phase}">Enter your finding</label>
           <div class="answer-row">
-            <input id="answer-${phase}" autocomplete="off" placeholder="Your answer..." required>
+            <input id="answer-${phase}" autocomplete="off"
+              placeholder="Your answer..." required>
             <button class="btn" type="submit">Submit</button>
           </div>
           <div id="feedback-${phase}" class="feedback"></div>
         </form>
-        <button class="back small" onclick="showHint('${phase}')">Request an evidence hint</button>
+
+        <button class="back small" onclick="showHint('${phase}')">
+          Request an evidence hint
+        </button>
         <div id="hint-${phase}" class="small"></div>
       `}
     </section>`;
