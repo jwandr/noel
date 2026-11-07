@@ -135,6 +135,7 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
 @media (max-width: 480px) {
   .choice-grid {    grid-template-columns: 1fr;  }
 }
+.evidence-image {  display: block;  width: 100%;  max-width: 420px;  height: auto;  margin: 18px auto;  border: 1px solid #d2b27d55;  border-radius: 10px;  background: #ffffff08;}
 </style>
 </head>
 <body>
@@ -181,6 +182,8 @@ const CONFIG = {
       lost: {
         destination: "Perth",
         prompt: "A mysterious sighting has been reported in Perth. Find the location indicated by the evidence.",
+        image: "train-lost.gif",
+        imageAlt: "A night sky over Kings Park with an unusual glowing object",
         answer: "KINGS PARK",
         hint: "For this framework, the test answer is KINGS PARK.",
         options: ["KINGS PARK", "COTTESLOE BEACH", "FREMANTLE", "PERTH ZOO"]
@@ -498,6 +501,14 @@ const phaseHTML = (phase, data, experience, complete, locked) => {
       ` : `
         <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
+        ${data.image ? `
+          <img
+            class="evidence-image"
+            src="${data.image}"
+            alt="${data.imageAlt || "Evidence image"}"
+            loading="lazy"
+          >
+        ` : ""}
         <div class="choice-grid">
           ${data.options.map(option => `
             <button
