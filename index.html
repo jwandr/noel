@@ -69,7 +69,7 @@ label { font-size:11px; letter-spacing:1.5px; color:var(--gold); text-transform:
 .progress-track,.progress-fill { height:5px; }
 .progress-track { background:#345a40; margin-top:10px; }
 .progress-fill { background:var(--gold); width:0; transition:width .3s; }
-.toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+.toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
 .back { color:var(--gold); background:none; border:0; padding:8px 0; }
 .phase { position:relative; background:#173b35; border:1px solid #526d5e; border-radius:14px; padding:25px; margin:18px 0; transition:border-color .25s ease; }
 .phase.active { border-color:var(--gold); }
@@ -409,8 +409,7 @@ function dashboard() {
   }).join("");
   showScreen(`
     <section class="dashboard-intro">
-      <div class="eyebrow">MISSION BRIEF</div>
-      <h1>Good morning, E.L.F. Agent Tim.</h1>
+      <h1>Good morning, E.L.F. Agent SuperTim.</h1>
       <p>Reports have been received of emoji escaping the Digital Realm and appearing in the physical world. Six cases require your attention. Investigate each disappearance, locate the missing emoji and recover the evidence. Christmas cheer depends on it.</p>
     </section>
     <div class="toolbar">
