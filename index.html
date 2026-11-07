@@ -684,7 +684,14 @@ input {
   /* Retains your existing stamp image */
   background-image: url("complete-stamp.png");
 }
+/* Allow folder tabs to protrude beyond their containers */
+.case {
+  overflow: visible !important;
+}
 
+.case::before {
+  z-index: 2;
+}
 </style>
 </head>
 <body>
