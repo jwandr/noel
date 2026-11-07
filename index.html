@@ -125,6 +125,11 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
   header { align-items:flex-start; }
   .case.done::after { width:145px; height:90px; }
 }
+.phase-grid {  display: grid;  grid-template-columns: repeat(2, minmax(0, 1fr));  gap: 18px;  align-items: start;}
+@media (max-width: 750px) {  
+  .phase-grid {    grid-template-columns: 1fr;  }
+}
+.phase-grid .phase {  height: 100%;}
 </style>
 </head>
 <body>
@@ -501,12 +506,13 @@ const phaseHTML = (phase, data, complete, locked) => {
   showScreen(`
     <div class="toolbar">
       <button class="back" onclick="dashboard()">← BACK TO OPERATIONS</button>
-      <span class="eyebrow">CASE FILE // ${op.id.toUpperCase()}</span>
     </div>
     <h1>${op.emoji} ${op.title}</h1>
     <p>${op.summary}</p>
-    ${phaseHTML("lost", op.lost, lostDone, false)}
-    ${phaseHTML("found", op.found, foundDone, !lostDone)}
+    <div class="phase-grid">
+      ${phaseHTML("lost", op.lost, lostDone, false)}
+      ${phaseHTML("found", op.found, foundDone, !lostDone)}
+    </div>
     ${done ? `
       <section class="reward">
         <div class="eyebrow">OPERATION SUCCESSFULLY COMPLETED</div>
