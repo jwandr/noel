@@ -937,7 +937,9 @@ function dashboard() {
       <h1>Good morning, E.L.F. Agent Tim.</h1>
       <p>Reports have been received of emoji escaping the Digital Realm and appearing in the physical world. Six cases require your attention. Investigate each disappearance, locate the missing emoji and recover the evidence. Christmas cheer depends on it.</p>
     </section>
-    <div class="progress-wrap">
+    <div class="toolbar">
+      <h2>Active case files</h2>
+      <div class="progress-wrap">
       <div class="toolbar">
         <span class="eyebrow">OVERALL CASE PROGRESS</span>
         <strong class="gold">${completedCount} / 6 RESOLVED</strong>
@@ -946,9 +948,6 @@ function dashboard() {
         <div class="progress-fill" style="width:${completedCount / 6 * 100}%"></div>
       </div>
     </div>
-    <div class="toolbar">
-      <h2>Active case files</h2>
-      <span class="small">Select any case to begin.</span>
     </div>
     <div class="grid">${cards}</div>
     ${allCasesDone() ? `
