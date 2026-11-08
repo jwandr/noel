@@ -873,7 +873,7 @@ function login(event) {
   event.preventDefault();
   const agent = document.getElementById("agent").value.trim().toUpperCase();
   const access = document.getElementById("access").value.trim();
-  if (agent === CONFIG.agentId.toUpperCase() && access === CONFIG.accessCode) {
+  if (agent === CONFIG.agentId.toUpperCase() && access.toUpperCase() === CONFIG.accessCode.toUpperCase()) {
     progress.loggedIn = true;
     saveProgress();
     initialiseNoelSystem();
