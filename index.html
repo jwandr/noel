@@ -300,10 +300,56 @@ footer { margin-top:50px; padding:20px 0; border-top:1px solid #d2b27d44; color:
 @media (prefers-reduced-motion: reduce) {
   .case-emoji.mystery { animation: none; }
 }
+/* ---------- Christmas lights ---------- */
+#xmasLights {
+  position:fixed; top:0; left:0; width:100%; height:60px;
+  pointer-events:none; z-index:60;
+  opacity:0; transform:translateY(-100%);
+  transition:opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+}
+body.lights-on #xmasLights { opacity:1; transform:none; }
+.shell { transition:padding-top .6s ease; }
+body.lights-on .shell { padding-top:64px; }
+
+#xmasLights svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+#xmasLights path { fill:none; stroke:#071a17; stroke-width:2; }
+
+.bulb {
+  position:absolute; width:12px; height:18px; margin-left:-6px;
+  border-radius:50% 50% 50% 50% / 35% 35% 65% 65%;
+  background:currentColor;
+  box-shadow:0 0 14px 4px currentColor;
+  animation:bulbTwinkle 2.2s ease-in-out infinite;
+}
+.bulb::before {            /* little socket cap */
+  content:""; position:absolute; top:-5px; left:2px; width:8px; height:7px;
+  background:#071a17; border-radius:2px;
+}
+@keyframes bulbTwinkle {
+  0%,100% { opacity:1;   box-shadow:0 0 14px 4px currentColor; }
+  50%     { opacity:.45; box-shadow:0 0 5px 1px currentColor; }
+}
+
+.lights-toggle {
+  position:fixed; right:16px; bottom:16px; z-index:70;
+  padding:10px 15px; border:1px solid var(--gold); border-radius:999px;
+  background:#102f2bee; color:var(--gold);
+  font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:700;
+  transition:background .2s;
+}
+.lights-toggle:hover { background:#19423b; }
+.lights-toggle[aria-pressed="true"] { background:#d2b27d22; color:#fff0d2; }
+
+@media(prefers-reduced-motion:reduce) {
+  .bulb { animation:none; }
+  #xmasLights, .shell { transition:none; }
+}
 </style>
 </head>
 <body>
 <div id="confetti"></div>
+<div id="xmasLights" aria-hidden="true"></div>
+<button id="lightsToggle" class="lights-toggle" type="button" aria-pressed="false" onclick="toggleLights()">💡 Lights: Off</button>
 <div class="shell">
   <header id="siteHeader" class="hidden">
     <div class="brand">
@@ -1324,6 +1370,64 @@ function start() {
     goLogin();
   }
 }
+// ============================================================
+// CHRISTMAS LIGHTS
+// ============================================================
+const LIGHT_COLOURS = ["#e8554e", "#f2c14e", "#5fbf7a", "#4fa3e0", "#f08ad0"];
+
+function buildLights() {
+  const box = document.getElementById("xmasLights");
+  if (!box) return;
+  const w = window.innerWidth;
+  const spacing = w < 600 ? 34 : 44;          // gap between bulbs
+  const swagWidth = spacing * 4;              // 4 bulbs per droop of wire
+  const yAt = x => 6 + 18 * Math.sin(Math.PI * (x % swagWidth) / swagWidth);
+
+  // Wire
+  let d = `M0 ${yAt(0).toFixed(1)}`;
+  for (let x = 6; x <= w; x += 6) d += ` L${x} ${yAt(x).toFixed(1)}`;
+
+  // Bulbs
+  let bulbs = "";
+  const count = Math.floor(w / spacing) + 1;
+  for (let i = 0; i < count; i++) {
+    const x = i * spacing + spacing / 2;
+    const colour = LIGHT_COLOURS[i % LIGHT_COLOURS.length];
+    const dur = (1.6 + Math.random() * 1.6).toFixed(2);
+    const delay = (Math.random() * 2).toFixed(2);
+    bulbs += `<span class="bulb" style="left:${x}px; top:${(yAt(x) + 2).toFixed(1)}px; color:${colour}; animation-duration:${dur}s; animation-delay:-${delay}s"></span>`;
+  }
+
+  box.innerHTML = `<svg viewBox="0 0 ${w} 60" preserveAspectRatio="none"><path d="${d}"/></svg>${bulbs}`;
+}
+
+function setLights(on, save = true) {
+  document.body.classList.toggle("lights-on", on);
+  const btn = document.getElementById("lightsToggle");
+  btn.setAttribute("aria-pressed", String(on));
+  btn.textContent = on ? "💡 Lights: On" : "💡 Lights: Off";
+  if (save) {
+    try { localStorage.setItem("noel-lights", on ? "1" : "0"); } catch (e) {}
+    if (on) playNoelChirp([1000, 1320, 1760]);   // little sparkle, respects sound toggle
+  }
+}
+
+function toggleLights() {
+  setLights(!document.body.classList.contains("lights-on"));
+}
+
+function initLights() {
+  buildLights();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildLights, 150);
+  });
+  let saved = null;
+  try { saved = localStorage.getItem("noel-lights"); } catch (e) {}
+  setLights(saved === "1", false);   // default OFF
+}
+initLights();
 start();
 </script>
 </body>
