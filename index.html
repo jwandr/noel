@@ -363,6 +363,10 @@ const CONFIG = {
       experiences: {
         lost: "Perth experience — to be confirmed",
         found: "Rwanda experience — to be confirmed"
+      },
+      experienceImages: {
+        lost: "perth-experience.jpg",     // optional
+        found: "rwanda-experience.jpg"    // optional
       }
     },
     {
@@ -447,18 +451,26 @@ const CONFIG = {
         destination: "Perth",
         prompt: "The evidence points to a location in Perth. Where should the agent investigate?",
         answer: "FREMANTLE",
+        image: "telescope-lost.gif",
+        imageAlt: "A night sky over Kings Park with an unusual glowing object",
         hint: "For this framework, the test answer is FREMANTLE."
       },
       found: {
         destination: "Australia",
         prompt: "A further lead has emerged elsewhere in Australia. Identify the destination.",
         answer: "MELBOURNE",
+        image: "telescope-lost.gif",
+        imageAlt: "A night sky over Kings Park with an unusual glowing object",
         hint: "For this framework, the test answer is MELBOURNE."
       },
       codeWord: "ALL",
       experiences: {
         lost: "Perth experience — to be confirmed",
         found: "Australian experience — to be confirmed"
+      },
+      experienceImages: {
+        lost: "39-steps.png",     // optional
+        found: "rwanda-experience.jpg"    // optional
       }
     },
     {
@@ -920,7 +932,7 @@ function renderOperation() {
   const lostDone = phaseDone(op.id, "lost");
   const foundDone = phaseDone(op.id, "found");
   const done = caseDone(op);
-const phaseHTML = (phase, data, experience, complete, locked) => {
+const phaseHTML = (phase, data, experience, complete, locked, experienceImage) => {
   const phaseNumber = phase === "lost" ? "01" : "02";
   const status = complete ? "COMPLETED" :
     locked ? "LOCKED" : "ACTIVE";
@@ -948,6 +960,15 @@ const phaseHTML = (phase, data, experience, complete, locked) => {
           <strong>${phase.toUpperCase()} // ${data.destination}</strong>
           ${experience}
         </div>
+        ${experienceImage ? `
+          <img
+            class="evidence-image"
+            src="${experienceImage}"
+            alt="${data.destination} experience"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          >
+        ` : ""}
       ` : `
         <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
@@ -984,8 +1005,8 @@ const phaseHTML = (phase, data, experience, complete, locked) => {
     <h1>${done ? op.emoji : "❓"} ${op.title}</h1>
     <p>${op.summary}</p>
     <div class="phase-grid">
-      ${phaseHTML("lost", op.lost, op.experiences.lost, lostDone, false)}
-      ${phaseHTML("found", op.found, op.experiences.found, foundDone, !lostDone)}
+      ${phaseHTML("lost", op.lost, op.experiences.lost, lostDone, false, op.experienceImages?.lost)}
+      ${phaseHTML("found", op.found, op.experiences.found, foundDone, !lostDone, op.experienceImages?.found)}
     </div>
     ${done ? `
       <section class="reward">
@@ -1219,7 +1240,9 @@ function finalSummary() {
       <div class="eyebrow">CASE FILE 00${i + 1}</div>
       <h3>${op.emoji} ${op.title}</h3>
       <div class="experience"><strong>LOST // ${op.lost.destination}</strong>${op.experiences.lost}</div>
+      ${op.experienceImages?.lost ? `<img class="evidence-image" src="${op.experienceImages.lost}" alt="" onerror="this.style.display='none'">` : ""}
       <div class="experience"><strong>FOUND // ${op.found.destination}</strong>${op.experiences.found}</div>
+      ${op.experienceImages?.found ? `<img class="evidence-image" src="${op.experienceImages.found}" alt="" onerror="this.style.display='none'">` : ""}
       <div class="small">RECOVERED WORD: <span class="gold">${op.codeWord}</span></div>
     </div>
   `).join("");
