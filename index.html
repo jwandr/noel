@@ -1040,7 +1040,7 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
       ${locked ? `
         <p>This investigation remains sealed pending completion of the preceding phase.</p>
       ` : complete ? `
-        <p class="gold">LOCATION CONFIRMED: ${data.answer}</p>
+        <p class="gold">SOLUTION CONFIRMED: ${data.answer}</p>
         <p class="small">Evidence successfully verified and entered into the N.O.E.L. archive.</p>
         <div class="experience">
           <strong>${phase.toUpperCase()} // ${data.destination}</strong>
@@ -1056,7 +1056,6 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
           >
         ` : ""}
       ` : `
-        <p class="phase-destination">DESTINATION: ${data.destination}</p>
         <p>${data.prompt}</p>
         ${data.image ? `
           <img
