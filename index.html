@@ -1066,10 +1066,10 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
             loading="lazy"
           >
         ` : ""}
-        <div class="choice-grid ${phase}">
+        <div class="choice-grid">
           ${data.options.map(option => `
             <button
-              class="btn secondary choice-button"
+              class="btn secondary choice-button ${phase}"
               onclick="submitChoice('${phase}', '${option.replace(/'/g, "\\\\'")}')"
             >
               ${option}
