@@ -344,6 +344,9 @@ body.lights-on .shell { padding-top:64px; }
   .bulb { animation:none; }
   #xmasLights, .shell { transition:none; }
 }
+.line-return {
+  white-space: pre-line;
+}
 </style>
 </head>
 <body>
@@ -1055,7 +1058,7 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
           >
         ` : ""}
       ` : `
-        <p>${data.prompt}</p>
+        <p class="line-return">${data.prompt}</p>
         ${data.image ? `
           <img
             class="evidence-image"
