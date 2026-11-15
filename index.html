@@ -1077,7 +1077,7 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
     <div class="toolbar">
       <button class="back" onclick="dashboard()">← BACK TO OPERATIONS</button>
     </div>
-    <h1>${done ? op.emoji : "❓"} ${op.title}</h1>
+    <h1>${op.title} ${done ? op.emoji : ""}</h1>
     <p>${op.summary}</p>
     <div class="phase-grid">
       ${phaseHTML("lost", op.lost, op.experiences.lost, lostDone, false, op.experienceImages?.lost)}
