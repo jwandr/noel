@@ -1067,7 +1067,7 @@ const phaseHTML = (phase, data, experience, complete, locked, experienceImage) =
             loading="lazy"
           >
         ` : ""}
-        <div class="choice-grid">
+        <div class="choice-grid ${phase}">
           ${data.options.map(option => `
             <button
               class="btn secondary choice-button"
